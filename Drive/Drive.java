@@ -63,8 +63,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // boolean toggles
   /*****************************************************************/
 
-
-
   // main
   public static void main(String[] args) {
     new Drive();
