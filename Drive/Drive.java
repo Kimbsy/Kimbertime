@@ -48,8 +48,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 1;
-
+  int PLAYERS = 2;
   // create identity transform
   AffineTransform identity = new AffineTransform();
 
@@ -97,6 +96,15 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       PlayerSprite s = new PlayerSprite();
       s.setX(50 * (i + 1));
       s.setY(50);
+
+      // @TODO this is temporory
+      if (i > 0) {
+        s.setColor(Color.GREEN);
+        s.setUpKey(KeyEvent.VK_COMMA);
+        s.setDownKey(KeyEvent.VK_O);
+        s.setLeftKey(KeyEvent.VK_A);
+        s.setRightKey(KeyEvent.VK_E);
+      }
       sprites.add(s);
     }
 
@@ -105,7 +113,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     /*****************************************************************/
 
     // create the backBuffer for some smooth-ass graphics
-    backBuffer = new BufferedImage(w + 200, h, BufferedImage.TYPE_INT_RGB);
+    backBuffer = new BufferedImage((w * 2), (h * 2), BufferedImage.TYPE_INT_RGB);
     g2d = backBuffer.createGraphics();
 
     // listen for mice (they're around here somewhere)
@@ -128,9 +136,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // erase the background
     g2d.setColor(Color.BLACK);
-    g2d.fillRect(0, 0, w, h);
-    g2d.setColor(Color.WHITE);
-    g2d.fillRect(w, 0, 0, h);
+    g2d.fillRect(0, 0, (w * 2), (h * 2));
 
     // draw the level
     drawLevel();
@@ -143,6 +149,18 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void drawLevel() {
 
+    int size = 30;
+
+    int numSquaresX = (w * 2) / size;
+    int numSquaresY = (h * 2) / size;
+
+    g2d.setColor(Color.BLUE);
+
+    for (int i = 0; i < numSquaresX; i++) {
+      for (int j = 0; j < numSquaresY; j++) {
+        g2d.drawRect(i * size, j * size, size, size);
+      }
+    }
   }
 
   public void drawSprites() {

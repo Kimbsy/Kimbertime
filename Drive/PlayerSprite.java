@@ -40,6 +40,7 @@ public class PlayerSprite extends BasicSprite {
   private double vel;
   private double velX, velY;
   private double moveAngle, faceAngle;
+  private Color color;
 
   ////////////////////////////
   // BASIC ACCESSOR METHODS //
@@ -50,6 +51,7 @@ public class PlayerSprite extends BasicSprite {
   public double getVelY() {return velY;}
   public double getMoveAngle() {return moveAngle;}
   public double getFaceAngle() {return faceAngle;}
+  public Color getColor() {return color;}
 
   ///////////////////////////
   // BASIC MUTATOR METHODS //
@@ -65,6 +67,7 @@ public class PlayerSprite extends BasicSprite {
   public void incMoveAngle(double moveAngle) {this.moveAngle += moveAngle; this.moveAngle = (this.moveAngle % 360);}
   public void setFaceAngle(double faceAngle) {this.faceAngle = faceAngle;}
   public void incFaceAngle(double faceAngle) {this.faceAngle += faceAngle; this.faceAngle = (this.faceAngle % 360);}
+  public void setColor(Color color) {this.color = color;}
 
   //////////////
   // CONTROLS //
@@ -100,7 +103,7 @@ public class PlayerSprite extends BasicSprite {
   public void paint(Graphics2D g2d) {
     g2d.translate(getX(), getY());
     g2d.rotate(Math.toRadians(getFaceAngle()));
-    g2d.setColor(Color.RED);
+    g2d.setColor(getColor());
     // offset for face angle
     g2d.fillRect(-(WIDTH / 2), -(HEIGHT / 2), WIDTH, HEIGHT);
   }
@@ -136,6 +139,11 @@ public class PlayerSprite extends BasicSprite {
         break;
     }
 
+    // get rid of rounding errors
+    if (Math.abs(getVel()) < 0.1) {
+      setVel(0);
+    }
+
     // calculate actual X and Y velocities
     setVelX(getVel() * (Math.cos(Math.toRadians(getFaceAngle()))));
     setVelY(getVel() * (Math.sin(Math.toRadians(getFaceAngle()))));
@@ -155,6 +163,7 @@ public class PlayerSprite extends BasicSprite {
     setVelY(0.0);
     setMoveAngle(0.0);
     setFaceAngle(0.0);
+    setColor(Color.RED);
     setUpKey(KeyEvent.VK_UP);
     setDownKey(KeyEvent.VK_DOWN);
     setLeftKey(KeyEvent.VK_LEFT);
