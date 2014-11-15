@@ -47,7 +47,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   int h = 600;
 
   // create sprite ArrayList
-  List<BasicSprite> sprites = Collections.synchronizedList(new ArrayList<BasicSprite>());
+  List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
   int PLAYERS = 1;
 
   // create identity transform
@@ -88,13 +88,18 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // application init event
   public void init() {
+    // need main page
+    /*****************************************************************/
+
     // create things
     for (int i = 0; i < PLAYERS; i++) {
-      BasicSprite s = new BasicSprite();
-      s.setX(50 * (i + 1);
+      PlayerSprite s = new PlayerSprite();
+      s.setX(50 * (i + 1));
       s.setY(50);
       sprites.add(s);
     }
+
+    // need to create level
     /*****************************************************************/
 
     // create the backBuffer for some smooth-ass graphics
@@ -125,14 +130,21 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     g2d.setColor(Color.WHITE);
     g2d.fillRect(w, 0, 0, h);
 
-    // draw the things
-    drawSprites();
+    // draw the level
+    drawLevel();
     /*****************************************************************/
+
+    // draw the sprites
+    drawSprites();
+  }
+
+  public void drawLevel() {
+
   }
 
   public void drawSprites() {
     for (int i = 0; i < sprites.size(); i++) {
-      BasicSprite s = sprites.get(i);
+      PlayerSprite s = sprites.get(i);
       g2d.setTransform(identity);
       s.paint(g2d);
     }
@@ -169,7 +181,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   public void updateSprites() {
     // loop through sprites
     for (int i = 0; i < sprites.size(); i++) {
-      BasicSprite s = sprites.get(i);
+      PlayerSprite s = sprites.get(i);
       // update faceAngle
       s.incFaceAngle((s.getTurn() * 5));
       // System.out.println(s.getFaceAngle());
@@ -222,7 +234,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     for (int i = 0; i < sprites.size(); i++) {
       int key = e.getKeyCode();
 
-      BasicSprite s = sprites.get(i);
+      PlayerSprite s = sprites.get(i);
 
       if (key == s.getUpKey()) {
         s.setAcc(1);
@@ -245,7 +257,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     for (int i = 0; i < sprites.size(); i++) {
       int key = e.getKeyCode();
 
-      BasicSprite s = sprites.get(i);
+      PlayerSprite s = sprites.get(i);
 
       if (key == s.getUpKey()) {
         // unset acc variable if already acc this way
