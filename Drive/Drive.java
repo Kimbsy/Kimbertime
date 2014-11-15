@@ -105,6 +105,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
         s.setDownKey(KeyEvent.VK_O);
         s.setLeftKey(KeyEvent.VK_A);
         s.setRightKey(KeyEvent.VK_E);
+        s.setLightsKey(KeyEvent.VK_SPACE);
       }
       sprites.add(s);
     }
@@ -143,7 +144,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     g2d.setTransform(identity);
 
     // erase the background
-    g2d.setColor(Color.BLACK);
+    g2d.setColor(Color.GRAY);
     g2d.fillRect(-w, -h, (w * 4), (h * 4));
 
     // draw the level
@@ -165,15 +166,24 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void drawSprites() {
-    // loop through the sprites
+    // loop through the sprites to draw the lights (want the under all sprites)
     for (int i = 0; i < sprites.size(); i++) {
       // load the sprite
       PlayerSprite s = sprites.get(i);
 
       // always draw from identity transform
       g2d.setTransform(identity);
+      // draw lights
+      s.drawLights(g2d);
+    }
+    // loop through again for rest of sprite
+    for (int i = 0; i < sprites.size(); i++) {
+      // load the sprite
+      PlayerSprite s = sprites.get(i);
 
-      // draw it
+      // always draw from identity transform
+      g2d.setTransform(identity);
+      // draw the sprite
       s.paint(g2d);
     }
   }
@@ -321,6 +331,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       if (key == s.getRightKey()) {
         // set turning varaible
         s.setTurn(1);
+      }
+      if (key == s.getLightsKey()) {
+        s.toggleLights();
       }
     }
   }

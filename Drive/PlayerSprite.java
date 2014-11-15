@@ -31,7 +31,7 @@ public class PlayerSprite extends BasicSprite {
   double BRAKING = 3;
   double MAX_SPEED = 15;
   int WIDTH = 30;
-  int HEIGHT = 30;
+  int HEIGHT = 45;
 
   //////////////////////
   // BASIC PROPERTIES //
@@ -85,6 +85,10 @@ public class PlayerSprite extends BasicSprite {
   private int rightKey;
   public int getRightKey() {return rightKey;}
   public void setRightKey(int rightKey) {this.rightKey = rightKey;}
+  private int lightsKey;
+  public int getLightsKey() {return lightsKey;}
+  public void setLightsKey(int lightsKey) {this.lightsKey = lightsKey;}
+
 
   private int turn;
   public int getTurn() {return turn;}
@@ -93,8 +97,15 @@ public class PlayerSprite extends BasicSprite {
   private int acc;
   public int getAcc() {return acc;}
   public void setAcc(int acc) {this.acc = acc;}
-  
 
+  /////////////
+  // STYLING //
+  /////////////
+  
+  private boolean lights;
+  public boolean getLights() {return lights;}
+  public void setLights(boolean lights) {this.lights = lights;}
+  public void toggleLights() {this.lights = !this.lights;}
 
   //////////////////////////
   // PLAYERSPRITE METHODS //
@@ -102,12 +113,50 @@ public class PlayerSprite extends BasicSprite {
 
   public void paint(Graphics2D g2d) {
     g2d.translate(getX(), getY());
-    g2d.rotate(Math.toRadians(getFaceAngle()));
-    g2d.setColor(getColor());
+    g2d.rotate(Math.toRadians(getFaceAngle() + 90));
     
-    // offset for face angle
+    // offset x and y for face angle
     g2d.translate(-(WIDTH / 2), -(HEIGHT / 2));
+
+    // draw some tyres
+    g2d.setColor(Color.BLACK);
+    g2d.fillRect(-3, 1, 4, 10);
+    g2d.fillRect(29, 1, 4, 10);
+    g2d.fillRect(-3, 34, 4, 10);
+    g2d.fillRect(29, 34, 4, 10);
+
+    // draw the body
+    g2d.setColor(getColor());
     g2d.fillRect(0, 0, WIDTH, HEIGHT);
+
+    // highlight and outline the body
+    g2d.setColor(Color.BLACK);
+    g2d.drawRect(0, 18, 30, 15);
+    g2d.drawRect(0, 0, WIDTH, HEIGHT);
+  }
+
+  public void drawLights(Graphics2D g2d) {
+    if (getLights()) {
+      // translate and rotate
+      g2d.translate(getX(), getY());
+      g2d.rotate(Math.toRadians(getFaceAngle() + 90));
+      
+      // offset x and y for face angle
+      g2d.translate(-(WIDTH / 2), -(HEIGHT / 2));
+
+      // 50% opacity
+      Color c = new Color(1, 1, 1, 0.5f);
+      g2d.setColor(c);
+
+      // draw left beam
+      int[] x1Coords = new int[] {2, 6, 18, -10};
+      int[] y1Coords = new int[] {1, 1, -40, -40};
+      g2d.fillPolygon(x1Coords, y1Coords, 4);
+      // draw right beam
+      int[] x2Coords = new int[] {24, 28, 40, 12};
+      int[] y2Coords = new int[] {1, 1, -40, -40};
+      g2d.fillPolygon(x2Coords, y2Coords, 4);
+    }
   }
 
   public void updateVel() {
@@ -170,7 +219,9 @@ public class PlayerSprite extends BasicSprite {
     setDownKey(KeyEvent.VK_DOWN);
     setLeftKey(KeyEvent.VK_LEFT);
     setRightKey(KeyEvent.VK_RIGHT);
+    setLightsKey(KeyEvent.VK_CONTROL);
     setTurn(0);
     setAcc(0);
+    setLights(false);
   }
 }
