@@ -15,8 +15,6 @@
 ***************************************************************************/
 
 /**
- * Driving game inspired by 'Micro Machines' (I believe it was on the SEGA Megadrive).
- *
  * Main Game class.
  */
 
@@ -97,8 +95,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     // create things
     for (int i = 0; i < PLAYERS; i++) {
       PlayerSprite s = new PlayerSprite();
-      s.setX(50 * (i + 1));
-      s.setY(50);
+      s.setX((w / 2) + (50 * i));
+      s.setY((h / 2) + (50));
 
       // @TODO this is temporory
       if (i > 0) {
@@ -146,7 +144,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // erase the background
     g2d.setColor(Color.BLACK);
-    g2d.fillRect(0, 0, (w * 2), (h * 2));
+    g2d.fillRect(-w, -h, (w * 4), (h * 4));
 
     // draw the level
     drawLevel();
@@ -235,6 +233,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   public void gameUpdate() {
     updateSprites();
     updateLevel();
+    checkCollisions();
+    checkVictoryConditions();
   }
 
   public void updateSprites() {
@@ -256,6 +256,14 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void updateLevel() {
     // @TODO this (ever gonna need this?)
+  }
+
+  public void checkCollisions() {
+    // @TODO check for collisions between players, bump them if true
+  }
+
+  public void checkVictoryConditions() {
+    // @TODO check if a player has won (too far ahead, crossed finish line)
   }
 
   ////////////
