@@ -104,6 +104,7 @@ public class PlayerSprite extends BasicSprite {
     g2d.translate(getX(), getY());
     g2d.rotate(Math.toRadians(getFaceAngle()));
     g2d.setColor(getColor());
+    
     // offset for face angle
     g2d.fillRect(-(WIDTH / 2), -(HEIGHT / 2), WIDTH, HEIGHT);
   }

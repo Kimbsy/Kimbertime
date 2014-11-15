@@ -37,8 +37,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // main thread used for the game loop
   Thread gameLoop;
+
   // backBuffer
   BufferedImage backBuffer;
+  
   // main drawing object for backBuffer
   Graphics2D g2d;
 
@@ -71,9 +73,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   int frameRate = 0, frameCount = 0;
   long startTime = System.currentTimeMillis();
 
-  // boolean toggles
-  /*****************************************************************/
-
   // main
   public static void main(String[] args) {
     new Drive();
@@ -94,7 +93,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   public void init() {
     // main page
     // @TODO create the main page [PLAY, SETTINGS, CREDITS]
-    /*****************************************************************/
 
     // create things
     for (int i = 0; i < PLAYERS; i++) {
@@ -113,10 +111,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       sprites.add(s);
     }
 
-    // create level
+    // create levels
     loadLevels();
-    // @TODO create levels
-    /*****************************************************************/
 
     // create the backBuffer for some smooth-ass graphics
     backBuffer = new BufferedImage((w * 2), (h * 2), BufferedImage.TYPE_INT_RGB);
@@ -129,7 +125,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void loadLevels() {
-    // @TODO temporary grid
+    // @TODO temporary grid need multiple levels
     Level l = new Level();
     l.setWidth(w * 2);
     l.setHeight(h * 2);
@@ -143,7 +139,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // repaint event draws the backBuffer
   public void paint(Graphics g) {
     // draw the backBuffer to the window
-    // g.drawImage(backBuffer, 0, 29, this);
     g.drawImage(backBuffer, (w / 2) - (int)getAverageX(), (h / 2) - (int)getAverageY(), this);
 
     // start all transforms at the identity
@@ -161,23 +156,26 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void drawLevel() {
-
-    // @TODO this function is temporary, level should be an object.
-
+    // get the level based on levelID
     Level l = levels.get(levelID);
 
     // translate background
     g2d.setTransform(identity);
-    // g2d.translate(-getAverageX(), -getAverageY());
 
+    // draw the level
     l.paint(g2d);
   }
 
   public void drawSprites() {
+    // loop through the sprites
     for (int i = 0; i < sprites.size(); i++) {
+      // load the sprite
       PlayerSprite s = sprites.get(i);
+
+      // always draw from identity transform
       g2d.setTransform(identity);
-      // g2d.translate(-getAverageX(), -getAverageY());
+
+      // draw it
       s.paint(g2d);
     }
   }
@@ -213,6 +211,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   public void run() {
     // aquire the current thread
     Thread t = Thread.currentThread();
+
     // kep going as long as the thread is alive
     while (t == gameLoop) {
       try {
@@ -241,19 +240,22 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   public void updateSprites() {
     // loop through sprites
     for (int i = 0; i < sprites.size(); i++) {
+      // load the sprite
       PlayerSprite s = sprites.get(i);
+
       // update faceAngle
       s.incFaceAngle((s.getTurn() * 5));
-      // System.out.println(s.getFaceAngle());
+
       // update velocity
       s.updateVel();
+
       // update position
       s.updatePos();
     }
   }
 
   public void updateLevel() {
-    // @TODO this
+    // @TODO this (ever gonna need this?)
   }
 
   ////////////
