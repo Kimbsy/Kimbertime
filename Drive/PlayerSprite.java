@@ -96,9 +96,9 @@ public class PlayerSprite extends BasicSprite {
   
 
 
-  ////////////////////
-  // SPRITE METHODS //
-  ////////////////////
+  //////////////////////////
+  // PLAYERSPRITE METHODS //
+  //////////////////////////
 
   public void paint(Graphics2D g2d) {
     g2d.translate(getX(), getY());

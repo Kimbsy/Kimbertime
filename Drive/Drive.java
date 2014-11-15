@@ -49,6 +49,11 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
   int PLAYERS = 2;
+
+  // create level ArrayList
+  List<Level> levels = Collections.synchronizedList(new ArrayList<Level>());
+  int levelID = 0;
+
   // create identity transform
   AffineTransform identity = new AffineTransform();
 
@@ -109,6 +114,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     }
 
     // create level
+    loadLevels();
     // @TODO create levels
     /*****************************************************************/
 
@@ -120,6 +126,14 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     addMouseListener(this);
     // get ready for some keypresses
     addKeyListener(this);
+  }
+
+  public void loadLevels() {
+    // @TODO temporary grid
+    Level l = new Level();
+    l.setWidth(w * 2);
+    l.setHeight(h * 2);
+    levels.add(l);
   }
 
   ///////////
@@ -140,8 +154,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // draw the level
     drawLevel();
-    // @TODO drav level
-    /*****************************************************************/
 
     // draw the sprites
     drawSprites();
@@ -149,18 +161,15 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void drawLevel() {
 
-    int size = 30;
+    // @TODO this function is temporary, level should be an object.
 
-    int numSquaresX = (w * 2) / size;
-    int numSquaresY = (h * 2) / size;
+    Level l = levels.get(levelID);
 
-    g2d.setColor(Color.BLUE);
+    // translate background
+    g2d.setTransform(identity);
+    g2d.translate(-getAverageX(), -getAverageY());
 
-    for (int i = 0; i < numSquaresX; i++) {
-      for (int j = 0; j < numSquaresY; j++) {
-        g2d.drawRect(i * size, j * size, size, size);
-      }
-    }
+    l.paint(g2d);
   }
 
   public void drawSprites() {
@@ -169,6 +178,34 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       g2d.setTransform(identity);
       s.paint(g2d);
     }
+  }
+
+  public double getAverageX() {
+    // get average player position
+    double sumX = 0;
+
+    for (int i = 0; i < sprites.size(); i++) {
+      PlayerSprite s = sprites.get(i);
+      sumX += s.getX();
+    }
+
+    double averageX = sumX / sprites.size();
+
+    return averageX;
+  }
+
+  public double getAverageY() {
+    // get average player position
+    double sumY = 0;
+
+    for (int i = 0; i < sprites.size(); i++) {
+      PlayerSprite s = sprites.get(i);
+      sumY += s.getY();
+    }
+
+    double averageY = sumY / sprites.size();
+
+    return averageY;
   }
 
   public void run() {
