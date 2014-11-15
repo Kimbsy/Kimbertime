@@ -88,7 +88,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // application init event
   public void init() {
-    // need main page
+    // main page
+    // @TODO create the main page [PLAY, SETTINGS, CREDITS]
     /*****************************************************************/
 
     // create things
@@ -99,7 +100,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       sprites.add(s);
     }
 
-    // need to create level
+    // create level
+    // @TODO create levels
     /*****************************************************************/
 
     // create the backBuffer for some smooth-ass graphics
@@ -132,6 +134,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // draw the level
     drawLevel();
+    // @TODO drav level
     /*****************************************************************/
 
     // draw the sprites
@@ -175,7 +178,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // move and animate objects in the game
   public void gameUpdate() {
     updateSprites();
-    /*****************************************************************/
+    updateLevel();
   }
 
   public void updateSprites() {
@@ -190,6 +193,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       // update position
       s.updatePos();
     }
+  }
+
+  public void updateLevel() {
+    // @TODO this
   }
 
   ////////////
@@ -217,9 +224,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // MOUSELISTENER METHODS //
   ///////////////////////////
 
-  public void mouseClicked(MouseEvent e) {
-
-  }
+  public void mouseClicked(MouseEvent e) {}
   public void mousePressed(MouseEvent e) {}
   public void mouseReleased(MouseEvent e) {}
   public void mouseExited(MouseEvent e) {}
