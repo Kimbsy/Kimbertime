@@ -15,7 +15,9 @@
 ***************************************************************************/
 
 /**
- * Driving game inspired by 'Micro Machines' (I believe it was on the SEGA Megadrive)
+ * Driving game inspired by 'Micro Machines' (I believe it was on the SEGA Megadrive).
+ *
+ * Main Game class.
  */
 
 import java.awt.*;
@@ -27,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 
-// main game class
 public class Drive extends JFrame implements Runnable, MouseListener, KeyListener {
 
   ///////////
@@ -161,7 +162,17 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // move and animate objects in the game
   public void gameUpdate() {
+    updateSprites();
     /*****************************************************************/
+  }
+
+  public void updateSprites() {
+    // loop through sprites
+    for (int i=0; i<sprites.size(); i++) {
+      BasicSprite s = sprites.get(i);
+      s.incFaceAngle(s.getTurn() * 5);
+      s.move();
+    }
   }
 
 
@@ -219,8 +230,56 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // KEYLISTENER METHODS //
   /////////////////////////
 
-  public void keyPressed(KeyEvent e) {}
-  public void keyReleased(KeyEvent e) {}
+  public void keyPressed(KeyEvent e) {
+    // check sprites for controls
+    for (int i=0; i<sprites.size(); i++) {
+      int key = e.getKeyCode();
+
+      BasicSprite s = sprites.get(i);
+
+      if (key == s.getUpKey()) {
+
+      }
+      if (key == s.getDownKey()) {
+
+      }
+      if (key == s.getLeftKey()) {
+        // set turning varaible
+        s.setTurn(-1);
+      }
+      if (key == s.getRightKey()) {
+        // set turning varaible
+        s.setTurn(1);
+      }
+    }
+  }
+  public void keyReleased(KeyEvent e) {
+    // check sprites for controls
+    for (int i=0; i<sprites.size(); i++) {
+      int key = e.getKeyCode();
+
+      BasicSprite s = sprites.get(i);
+
+      if (key == s.getUpKey()) {
+
+      }
+      if (key == s.getDownKey()) {
+
+      }
+      if (key == s.getLeftKey()) {
+        // unset turning variable if already turning this way
+        if (s.getTurn() == -1) {
+          s.setTurn(0);
+        }
+      }
+      if (key == s.getRightKey()) {
+        // unset turning variable if already turning this way
+        if (s.getTurn() == 1) {
+          s.setTurn(0);
+        }
+      }
+    }
+  }
   public void keyTyped(KeyEvent e) {}
 
 

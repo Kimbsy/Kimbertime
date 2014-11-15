@@ -15,24 +15,25 @@
 ***************************************************************************/
 
 /**
- * basic sprite class
+ * Basic sprite class.
  */
 
 import java.awt.*;
+import java.awt.event.*;
 
 public class BasicSprite {
 
-  ////////////////
-  // properties //
-  ////////////////
+  //////////////////////
+  // BASIC PROPERTIES //
+  //////////////////////
 
   private double x, y;
   private double velX, velY;
   private double moveAngle, faceAngle;
 
-  //////////////////////
-  // accessor methods //
-  //////////////////////
+  ////////////////////////////
+  // BASIC ACCESSOR METHODS //
+  ////////////////////////////
 
   public double getX() {return x;}
   public double getY() {return y;}
@@ -41,9 +42,9 @@ public class BasicSprite {
   public double getMoveAngle() {return moveAngle;}
   public double getFaceAngle() {return faceAngle;}
 
-  /////////////////////
-  // mutator methods //
-  /////////////////////
+  ///////////////////////////
+  // BASIC MUTATOR METHODS //
+  ///////////////////////////
 
   public void setX(double x) {this.x = x;}
   public void incX(double x) {this.x += x;}
@@ -58,14 +59,46 @@ public class BasicSprite {
   public void setFaceAngle(double faceAngle) {this.faceAngle = faceAngle;}
   public void incFaceAngle(double faceAngle) {this.faceAngle += faceAngle;}
 
+  //////////////
+  // CONTROLS //
+  //////////////
+
+  private int upKey;
+  public int getUpKey() {return upKey;}
+  public void setUpKey(int upKey) {this.upKey = upKey;}
+  private int downKey;
+  public int getDownKey() {return downKey;}
+  public void setDownKey(int downKey) {this.downKey = downKey;}
+  private int leftKey;
+  public int getLeftKey() {return leftKey;}
+  public void setLeftKey(int leftKey) {this.leftKey = leftKey;}
+  private int rightKey;
+  public int getRightKey() {return rightKey;}
+  public void setRightKey(int rightKey) {this.rightKey = rightKey;}
+
+  private int turn;
+  public int getTurn() {return turn;}
+  public void setTurn(int turn) {this.turn = turn;}
+
+  private int accel;
+  public int getAccel() {return accel;}
+  public void setAccel(int accel) {this.accel = accel;}
+  
+
+
   ////////////////////
-  // sprite methods //
+  // SPRITE METHODS //
   ////////////////////
 
   public void paint(Graphics2D g2d) {
     g2d.translate(x, y);
     g2d.rotate(Math.toRadians(faceAngle));
     g2d.setColor(Color.RED);
+
+    //***************************************************
+    // NEEDS TO OFSET FOR FACE ANGLE
+    //***************************************************
+
     g2d.fillRect(0, 0, 30, 30);
   }
 
@@ -84,5 +117,10 @@ public class BasicSprite {
     setVelY(0.0);
     setMoveAngle(0.0);
     setFaceAngle(0.0);
+    setTurn(0);
+    setUpKey(KeyEvent.VK_UP);
+    setDownKey(KeyEvent.VK_DOWN);
+    setLeftKey(KeyEvent.VK_LEFT);
+    setRightKey(KeyEvent.VK_RIGHT);
   }
 }
