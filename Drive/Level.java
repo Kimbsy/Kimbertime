@@ -68,6 +68,7 @@ public class Level extends BasicSprite {
   /////////////////////////
 
   Level() {
-
+    setWidth(0);
+    setHeight(0);
   }
 }

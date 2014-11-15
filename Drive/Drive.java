@@ -143,7 +143,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // repaint event draws the backBuffer
   public void paint(Graphics g) {
     // draw the backBuffer to the window
-    g.drawImage(backBuffer, 0, 29, this);
+    // g.drawImage(backBuffer, 0, 29, this);
+    g.drawImage(backBuffer, (w / 2) - (int)getAverageX(), (h / 2) - (int)getAverageY(), this);
 
     // start all transforms at the identity
     g2d.setTransform(identity);
@@ -167,7 +168,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // translate background
     g2d.setTransform(identity);
-    g2d.translate(-getAverageX(), -getAverageY());
+    // g2d.translate(-getAverageX(), -getAverageY());
 
     l.paint(g2d);
   }
@@ -176,6 +177,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     for (int i = 0; i < sprites.size(); i++) {
       PlayerSprite s = sprites.get(i);
       g2d.setTransform(identity);
+      // g2d.translate(-getAverageX(), -getAverageY());
       s.paint(g2d);
     }
   }
