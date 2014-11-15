@@ -1,5 +1,5 @@
 /***************************************************************************
-* Copyright 2013 Dave Kimber
+* Copyright 2014 Dave Kimber
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -18,12 +18,14 @@
  * Driving game inspired by 'Micro Machines' (I believe it was on the SEGA Megadrive)
  */
 
-import javax.swing.JFrame;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
 import java.awt.geom.*;
+import java.awt.image.*;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.*;
 
 // main game class
 public class Drive extends JFrame implements Runnable, MouseListener, KeyListener {
@@ -42,6 +44,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // frame dimensions
   int w = 900;
   int h = 600;
+
+  // create sprite ArrayList
+  List<BasicSprite> sprites = Collections.synchronizedList(new ArrayList<BasicSprite>());
+  int PLAYERS = 1;
 
   // create identity transform
   AffineTransform identity = new AffineTransform();
@@ -82,6 +88,12 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // application init event
   public void init() {
     // create things
+    for (int i=0; i<PLAYERS; i++) {
+      BasicSprite s = new BasicSprite();
+      s.setX(50);
+      s.setY(50);
+      sprites.add(s);
+    }
     /*****************************************************************/
 
     // create the backBuffer for some smooth-ass graphics
@@ -102,8 +114,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   public void paint(Graphics g) {
     // draw the backBuffer to the window
     g.drawImage(backBuffer, 0, 29, this);
+
     // start all transforms at the identity
     g2d.setTransform(identity);
+
     // erase the background
     g2d.setColor(Color.BLACK);
     g2d.fillRect(0, 0, w, h);
@@ -111,7 +125,16 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     g2d.fillRect(w, 0, 0, h);
 
     // draw the things
+    drawSprites();
     /*****************************************************************/
+  }
+
+  public void drawSprites() {
+    for (int i=0; i<sprites.size(); i++) {
+      BasicSprite s = sprites.get(i);
+      g2d.setTransform(identity);
+      s.paint(g2d);
+    }
   }
 
   public void run() {
