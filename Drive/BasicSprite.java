@@ -23,11 +23,22 @@ import java.awt.event.*;
 
 public class BasicSprite {
 
+  ///////////////
+  // CONSTANTS //
+  ///////////////
+
+  double ACC = 0.1;
+  double BRAKING = 3;
+  double MAX_SPEED = 15;
+  int WIDTH = 30;
+  int HEIGHT = 30;
+
   //////////////////////
   // BASIC PROPERTIES //
   //////////////////////
 
   private double x, y;
+  private double vel;
   private double velX, velY;
   private double moveAngle, faceAngle;
 
@@ -37,6 +48,7 @@ public class BasicSprite {
 
   public double getX() {return x;}
   public double getY() {return y;}
+  public double getVel() {return vel;}
   public double getVelX() {return velX;}
   public double getVelY() {return velY;}
   public double getMoveAngle() {return moveAngle;}
@@ -50,14 +62,16 @@ public class BasicSprite {
   public void incX(double x) {this.x += x;}
   public void setY(double y) {this.y = y;}
   public void incY(double y) {this.y += y;}
+  public void setVel(double vel) {this.vel = vel;}
+  public void incVel(double vel) {this.vel += vel;}
   public void setVelX(double velX) {this.velX = velX;}
   public void incVelX(double velX) {this.velX += velX;}
   public void setVelY(double velY) {this.velY = velY;}
   public void incVelY(double velY) {this.velY += velY;}
   public void setMoveAngle(double moveAngle) {this.moveAngle = moveAngle;}
-  public void incMoveAngle(double moveAngle) {this.moveAngle += moveAngle;}
+  public void incMoveAngle(double moveAngle) {this.moveAngle += moveAngle; this.moveAngle = (this.moveAngle % 360);}
   public void setFaceAngle(double faceAngle) {this.faceAngle = faceAngle;}
-  public void incFaceAngle(double faceAngle) {this.faceAngle += faceAngle;}
+  public void incFaceAngle(double faceAngle) {this.faceAngle += faceAngle; this.faceAngle = (this.faceAngle % 360);}
 
   //////////////
   // CONTROLS //
@@ -80,9 +94,9 @@ public class BasicSprite {
   public int getTurn() {return turn;}
   public void setTurn(int turn) {this.turn = turn;}
 
-  private int accel;
-  public int getAccel() {return accel;}
-  public void setAccel(int accel) {this.accel = accel;}
+  private int acc;
+  public int getAcc() {return acc;}
+  public void setAcc(int acc) {this.acc = acc;}
   
 
 
@@ -91,19 +105,52 @@ public class BasicSprite {
   ////////////////////
 
   public void paint(Graphics2D g2d) {
-    g2d.translate(x, y);
-    g2d.rotate(Math.toRadians(faceAngle));
+    g2d.translate(getX(), getY());
+    g2d.rotate(Math.toRadians(getFaceAngle()));
     g2d.setColor(Color.RED);
-
-    //***************************************************
-    // NEEDS TO OFSET FOR FACE ANGLE
-    //***************************************************
-
-    g2d.fillRect(0, 0, 30, 30);
+    // offset for face angle
+    g2d.fillRect(-(WIDTH / 2), -(HEIGHT / 2), WIDTH, HEIGHT);
   }
 
-  public void move() {
+  public void updateVel() {
+    switch(acc) {
+      // if neither held tend towards 0
+      case 0:
+        if (getVel() > 0) {
+          incVel(-ACC);
+        }
+        else if (getVel() < 0) {
+          incVel(ACC);
+        }
+        break;
+      // if forward speed up
+      case 1:
+        if (getVel() < MAX_SPEED) {
+          incVel(ACC);
+        }
+        break;
+      // if backward slow down
+      case -1:
+        if (getVel() > (-MAX_SPEED)) {
+          // if going forward, brake hard
+          if (getVel() > 0) {
+            incVel(-(ACC * BRAKING));
+          }
+          else {
+            incVel(-ACC);
+          }
+        }
+        break;
+    }
 
+    // calculate actual X and Y velocities
+    setVelX(getVel() * (Math.cos(Math.toRadians(getFaceAngle()))));
+    setVelY(getVel() * (Math.sin(Math.toRadians(getFaceAngle()))));
+  }
+
+  public void updatePos() {
+    incX(getVelX());
+    incY(getVelY());
   }
 
   /////////////////////////
@@ -117,10 +164,11 @@ public class BasicSprite {
     setVelY(0.0);
     setMoveAngle(0.0);
     setFaceAngle(0.0);
-    setTurn(0);
     setUpKey(KeyEvent.VK_UP);
     setDownKey(KeyEvent.VK_DOWN);
     setLeftKey(KeyEvent.VK_LEFT);
     setRightKey(KeyEvent.VK_RIGHT);
+    setTurn(0);
+    setAcc(0);
   }
 }

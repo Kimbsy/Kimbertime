@@ -89,16 +89,16 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // application init event
   public void init() {
     // create things
-    for (int i=0; i<PLAYERS; i++) {
+    for (int i = 0; i < PLAYERS; i++) {
       BasicSprite s = new BasicSprite();
-      s.setX(50);
+      s.setX(50 * (i + 1);
       s.setY(50);
       sprites.add(s);
     }
     /*****************************************************************/
 
     // create the backBuffer for some smooth-ass graphics
-    backBuffer = new BufferedImage(w+200, h, BufferedImage.TYPE_INT_RGB);
+    backBuffer = new BufferedImage(w + 200, h, BufferedImage.TYPE_INT_RGB);
     g2d = backBuffer.createGraphics();
 
     // listen for mice (they're around here somewhere)
@@ -131,7 +131,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void drawSprites() {
-    for (int i=0; i<sprites.size(); i++) {
+    for (int i = 0; i < sprites.size(); i++) {
       BasicSprite s = sprites.get(i);
       g2d.setTransform(identity);
       s.paint(g2d);
@@ -168,34 +168,21 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void updateSprites() {
     // loop through sprites
-    for (int i=0; i<sprites.size(); i++) {
+    for (int i = 0; i < sprites.size(); i++) {
       BasicSprite s = sprites.get(i);
-      s.incFaceAngle(s.getTurn() * 5);
-      s.move();
+      // update faceAngle
+      s.incFaceAngle((s.getTurn() * 5));
+      // System.out.println(s.getFaceAngle());
+      // update velocity
+      s.updateVel();
+      // update position
+      s.updatePos();
     }
   }
 
-
-  ////////////////
-  // MAIN LOGIC //
-  ////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  ////////////
+  // INUPUT //
+  ////////////
 
   // custom method to get mouse button status
   public void checkButton(MouseEvent e) {
@@ -232,16 +219,16 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void keyPressed(KeyEvent e) {
     // check sprites for controls
-    for (int i=0; i<sprites.size(); i++) {
+    for (int i = 0; i < sprites.size(); i++) {
       int key = e.getKeyCode();
 
       BasicSprite s = sprites.get(i);
 
       if (key == s.getUpKey()) {
-
+        s.setAcc(1);
       }
       if (key == s.getDownKey()) {
-
+        s.setAcc(-1);
       }
       if (key == s.getLeftKey()) {
         // set turning varaible
@@ -255,16 +242,22 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
   public void keyReleased(KeyEvent e) {
     // check sprites for controls
-    for (int i=0; i<sprites.size(); i++) {
+    for (int i = 0; i < sprites.size(); i++) {
       int key = e.getKeyCode();
 
       BasicSprite s = sprites.get(i);
 
       if (key == s.getUpKey()) {
-
+        // unset acc variable if already acc this way
+        if (s.getAcc() == 1) {
+          s.setAcc(0);
+        }
       }
       if (key == s.getDownKey()) {
-
+        // unset acc variable if already acc this way
+        if (s.getAcc() == -1) {
+          s.setAcc(0);
+        }
       }
       if (key == s.getLeftKey()) {
         // unset turning variable if already turning this way
