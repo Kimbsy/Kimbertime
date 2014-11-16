@@ -107,6 +107,15 @@ public class PlayerSprite extends BasicSprite {
   public void setLights(boolean lights) {this.lights = lights;}
   public void toggleLights() {this.lights = !this.lights;}
 
+  ////////////////
+  // COLLISIONS //
+  ////////////////
+  
+  private int colTime;
+  public int getColTime() {return colTime;}
+  public void setColTime(int colTime) {this.colTime = colTime;}
+  public void incColTime(int colTime) {this.colTime += colTime;}
+
   //////////////////////////
   // PLAYERSPRITE METHODS //
   //////////////////////////
@@ -204,6 +213,37 @@ public class PlayerSprite extends BasicSprite {
     incX(getVelX());
     incY(getVelY());
   }
+
+
+  ///////////////////////////
+  //////////////////////////////
+  /////////////////////////////////
+  ////////////////////////////////////
+  ///////////////////////////////////////
+  // CANT GET THIS TO WORK // // // // //
+  ///////////////////////////////////////
+  ////////////////////////////////////
+  /////////////////////////////////
+  //////////////////////////////
+  ///////////////////////////
+
+  // // need a polgon bounding box as it needs to be able to rotate
+  // public Polygon getPolyBounds() {
+  //   // set up x coords
+  //   double cos = Math.cos(Math.toRadians(getFaceAngle()));
+  //   int[] xCoords = new int[] {(int)(cos * (-WIDTH / 2)), (int)(cos * (WIDTH / 2)), (int)(cos * (WIDTH / 2)), (int)(cos * (-WIDTH / 2))};
+
+  //   // set up y coords
+  //   double sin = Math.sin(Math.toRadians(getFaceAngle()));
+  //   int[] yCoords = new int[] {(int)(sin * (-HEIGHT / 2)), (int)(sin * (HEIGHT / 2)), (int)(sin * (HEIGHT / 2)), (int)(sin * (-HEIGHT / 2))};
+
+  //   System.out.println(xCoords);
+  //   System.out.println(yCoords);
+
+  //   Polygon bounds = new Polygon(xCoords, yCoords, 4);
+
+  //   return bounds;
+  // }
 
   /////////////////////////
   // DEFAULT CONSTRUCTOR //

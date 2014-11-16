@@ -95,8 +95,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     // create things
     for (int i = 0; i < PLAYERS; i++) {
       PlayerSprite s = new PlayerSprite();
-      s.setX((w / 2) + (50 * i));
-      s.setY((h / 2) + (50));
+      s.setX((w / 2) + (100 * i));
+      s.setY((h / 2) + (100));
 
       // @TODO this is temporory
       if (i > 0) {
@@ -261,6 +261,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
       // update position
       s.updatePos();
+
+      // decay collision timer
+      s.incColTime(-1);
     }
   }
 
@@ -270,7 +273,44 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void checkCollisions() {
     // @TODO check for collisions between players, bump them if true
+    
+    for (int i = 0; i < sprites.size(); i++) {
+      PlayerSprite s1 = sprites.get(i);
+      for (int j = 0; j < sprites.size(); j++) {
+        PlayerSprite s2 = sprites.get(j);
+
+        if (i != j && (s1.getColTime() < 0) && (s2.getColTime() < 0)) {
+          if (isCollision(s1.getX(), s2.getX(), s1.getY(), s2.getY(), 15)) {
+            // temporary values so they can switch velocitities and directions
+            double tempX = s1.getVelX();
+            double tempY = s1.getVelY();
+            double tempFace = s1.getFaceAngle();
+
+            s1.setVelX(s2.getVelX());
+            s1.setVelY(s2.getVelY());
+            s1.setFaceAngle(s2.getFaceAngle());
+            s2.setVelX(tempX);
+            s2.setVelY(tempY);
+            s2.setFaceAngle(tempFace);
+
+            // update so positions change to avoid clipping
+            updateSprites();
+
+            // collision delay
+            s1.setColTime(10);
+            s2.setColTime(10);
+          }
+        }
+      }
+    }
   }
+
+  public boolean isCollision(double x1, double x2, double y1, double y2, double r) {
+    final double a = 2 * r;
+    final double dx = x1 - x2;
+    final double dy = y1 - y2;
+    return a * a > (dx * dx + dy * dy);
+}
 
   public void checkVictoryConditions() {
     // @TODO check if a player has won (too far ahead, crossed finish line)
