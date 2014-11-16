@@ -272,7 +272,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void checkCollisions() {
-    // @TODO check for collisions between players, bump them if true
     
     for (int i = 0; i < sprites.size(); i++) {
       PlayerSprite s1 = sprites.get(i);
@@ -281,14 +280,19 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
         if (i != j && (s1.getColTime() < 0) && (s2.getColTime() < 0)) {
           if (isCollision(s1.getX(), s2.getX(), s1.getY(), s2.getY(), 15)) {
+
             // temporary values so they can switch velocitities and directions
+            double tempVel = s1.getVel();
             double tempX = s1.getVelX();
             double tempY = s1.getVelY();
             double tempFace = s1.getFaceAngle();
 
+            s1.setVel(s2.getVel());
             s1.setVelX(s2.getVelX());
             s1.setVelY(s2.getVelY());
             s1.setFaceAngle(s2.getFaceAngle());
+
+            s2.setVel(tempVel);
             s2.setVelX(tempX);
             s2.setVelY(tempY);
             s2.setFaceAngle(tempFace);
@@ -297,8 +301,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             updateSprites();
 
             // collision delay
-            s1.setColTime(10);
-            s2.setColTime(10);
+            s1.setColTime(30);
+            s2.setColTime(30);
           }
         }
       }
@@ -306,6 +310,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public boolean isCollision(double x1, double x2, double y1, double y2, double r) {
+    // collisions based on circles (doesn't really need to be more complex)
+
     final double a = 2 * r;
     final double dx = x1 - x2;
     final double dy = y1 - y2;
@@ -411,6 +417,5 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     }
   }
   public void keyTyped(KeyEvent e) {}
-
 
 }
