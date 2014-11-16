@@ -153,10 +153,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       // @TODO set up controls properly
       if (i > 0) {
         s.setColor(Color.GREEN);
-        s.setUpKey(KeyEvent.VK_COMMA);
-        s.setDownKey(KeyEvent.VK_O);
+        s.setUpKey(KeyEvent.VK_W);
+        s.setDownKey(KeyEvent.VK_S);
         s.setLeftKey(KeyEvent.VK_A);
-        s.setRightKey(KeyEvent.VK_E);
+        s.setRightKey(KeyEvent.VK_D);
         s.setLightsKey(KeyEvent.VK_SPACE);
       }
       sprites.add(s);
