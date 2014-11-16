@@ -46,13 +46,16 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   int w = 900;
   int h = 600;
 
-  // create sprite ArrayList
-  List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 2;
+  // create page ArrayList
+  List<Page> pages = Collections.synchronizedList(new ArrayList<Page>());
 
   // create level ArrayList
   List<Level> levels = Collections.synchronizedList(new ArrayList<Level>());
   int levelID = 0;
+
+  // create sprite ArrayList
+  List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
+  int PLAYERS = 2;
 
   // create identity transform
   AffineTransform identity = new AffineTransform();
@@ -89,8 +92,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // application init event
   public void init() {
-    // main page
-    // @TODO create the main page [PLAY, SETTINGS, CREDITS]
+    // create pages
+    initPages();
 
     // create things
     for (int i = 0; i < PLAYERS; i++) {
@@ -111,7 +114,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     }
 
     // create levels
-    loadLevels();
+    initLevels();
 
     // create the backBuffer for some smooth-ass graphics
     backBuffer = new BufferedImage((w * 2), (h * 2), BufferedImage.TYPE_INT_RGB);
@@ -123,7 +126,30 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     addKeyListener(this);
   }
 
-  public void loadLevels() {
+  public void initPages() {
+    // create main page
+    Page main = new Page();
+    main.setName("main");
+    main.setTitle("Drive: a Kimbertime game.");
+    main.setVisible(true);
+    pages.add(main);
+
+    // create settings page
+    Page settings = new Page();
+    settings.setName("settings");
+    settings.setTitle("Settings:");
+    settings.setVisible(false);
+    pages.add(settings);
+
+    // create credits page
+    Page credits = new Page();
+    credits.setName("credits");
+    credits.setTitle("Credits:")
+    credits.setVisible(false);
+    pages.add(credits);
+  }
+
+  public void initLevels() {
     // @TODO temporary grid need multiple levels
     Level l = new Level();
     l.setWidth(w * 2);

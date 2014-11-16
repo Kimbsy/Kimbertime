@@ -48,6 +48,7 @@ public class Button extends BasicSprite {
   ////////////////////////
 
   Button() {
-
+    setDescription("");
+    setImage(null);
   }
 }

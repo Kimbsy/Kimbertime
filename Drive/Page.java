@@ -26,28 +26,36 @@ public class Page extends BasicSprite {
   // PAGE PROPERTIES //
   /////////////////////
 
+  private String name;
   private String title;
   private List<Button> buttons;
+  private boolean visible;
 
   //////////////////////
   // ACCESSOR METHODS //
   //////////////////////
 
+  public String getName() {return name;}
   public String getTitle() {return title;}
   public List<Button> getButtons() {return buttons;}
+  public boolean getVisible() {return visible;}
 
   /////////////////////
   // MUTATOR METHODS //
   /////////////////////
 
+  public void setName(String name) {this.name = name;}
   public void setTitle(String title) {this.title = title;}
   public void addButton(Button button) {this.buttons.add(button);}
+  public void setVisible(boolean visible) {this.visible = visible;}
 
   /////////////////////////
   // DEFAULT CONSTRUCTOR //
   /////////////////////////
 
   Page() {
-
+    setName("");
+    setTitle("");
+    setVisible(false);
   }
 }
