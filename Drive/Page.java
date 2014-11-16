@@ -18,6 +18,7 @@
  * Page class.
  */
 
+import java.awt.*;
 import java.util.List;
 
 public class Page extends BasicSprite {
@@ -48,6 +49,14 @@ public class Page extends BasicSprite {
   public void setTitle(String title) {this.title = title;}
   public void addButton(Button button) {this.buttons.add(button);}
   public void setVisible(boolean visible) {this.visible = visible;}
+
+  //////////////////
+  // PAGE METHODS //
+  //////////////////
+  
+  public void paint(Graphics2D g2d) {
+
+  }
 
   /////////////////////////
   // DEFAULT CONSTRUCTOR //

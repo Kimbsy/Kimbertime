@@ -74,6 +74,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   int frameRate = 0, frameCount = 0;
   long startTime = System.currentTimeMillis();
 
+  // boolean toggles
+  boolean started = false;
+
   // main
   public static void main(String[] args) {
     new Drive();
@@ -95,23 +98,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     // create pages
     initPages();
 
-    // create things
-    for (int i = 0; i < PLAYERS; i++) {
-      PlayerSprite s = new PlayerSprite();
-      s.setX((w / 2) + (100 * i));
-      s.setY((h / 2) + (100));
-
-      // @TODO this is temporory
-      if (i > 0) {
-        s.setColor(Color.GREEN);
-        s.setUpKey(KeyEvent.VK_COMMA);
-        s.setDownKey(KeyEvent.VK_O);
-        s.setLeftKey(KeyEvent.VK_A);
-        s.setRightKey(KeyEvent.VK_E);
-        s.setLightsKey(KeyEvent.VK_SPACE);
-      }
-      sprites.add(s);
-    }
+    // create players
+    initSprites();
 
     // create levels
     initLevels();
@@ -131,7 +119,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     Page main = new Page();
     main.setName("main");
     main.setTitle("Drive: a Kimbertime game.");
-    main.setVisible(true);
+    main.setVisible(false);
     pages.add(main);
 
     // create settings page
@@ -144,9 +132,35 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     // create credits page
     Page credits = new Page();
     credits.setName("credits");
-    credits.setTitle("Credits:")
+    credits.setTitle("Credits:");
     credits.setVisible(false);
     pages.add(credits);
+
+    // create pause page
+    Page pause = new Page();
+    pause.setName("pause");
+    pause.setTitle("Game Paused");
+    pause.setVisible(false);
+    pages.add(pause);
+  }
+
+  public void initSprites() {
+    for (int i = 0; i < PLAYERS; i++) {
+      PlayerSprite s = new PlayerSprite();
+      s.setX((w / 2) + (100 * i));
+      s.setY((h / 2) + (100));
+
+      // @TODO set up controls properly
+      if (i > 0) {
+        s.setColor(Color.GREEN);
+        s.setUpKey(KeyEvent.VK_COMMA);
+        s.setDownKey(KeyEvent.VK_O);
+        s.setLeftKey(KeyEvent.VK_A);
+        s.setRightKey(KeyEvent.VK_E);
+        s.setLightsKey(KeyEvent.VK_SPACE);
+      }
+      sprites.add(s);
+    }
   }
 
   public void initLevels() {
@@ -163,6 +177,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // repaint event draws the backBuffer
   public void paint(Graphics g) {
+
     // draw the backBuffer to the window
     g.drawImage(backBuffer, (w / 2) - (int)getAverageX(), (h / 2) - (int)getAverageY(), this);
 
@@ -173,11 +188,16 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     g2d.setColor(Color.GRAY);
     g2d.fillRect(-w, -h, (w * 4), (h * 4));
 
-    // draw the level
-    drawLevel();
+    if (started) {
+      // draw the level
+      drawLevel();
 
-    // draw the sprites
-    drawSprites();
+      // draw the sprites
+      drawSprites();
+    }
+    else {
+      // @TODO draw pages
+    }
   }
 
   public void drawLevel() {
@@ -267,10 +287,34 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // move and animate objects in the game
   public void gameUpdate() {
-    updateSprites();
-    updateLevel();
-    checkCollisions();
-    checkVictoryConditions();
+    // see if the game is running
+    checkStarted();
+
+    // if it is, do all the things
+    if (started) {
+      updateSprites();
+      updateLevel();
+      checkCollisions();
+      checkVictoryConditions();
+    }
+  }
+
+  public void checkStarted() {
+    boolean anyVisible = false;
+
+    for (int i = 0; i < pages.size(); i++) {
+      Page p = pages.get(i);
+      if (p.getVisible()) {
+        anyVisible = true;
+      }
+    }
+
+    if (anyVisible) {
+      started = false;
+    }
+    else {
+      started = true;
+    }
   }
 
   public void updateSprites() {
@@ -337,7 +381,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public boolean isCollision(double x1, double x2, double y1, double y2, double r) {
     // collisions based on circles (doesn't really need to be more complex)
-
     final double a = 2 * r;
     final double dx = x1 - x2;
     final double dy = y1 - y2;
@@ -384,64 +427,69 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   /////////////////////////
 
   public void keyPressed(KeyEvent e) {
-    // check sprites for controls
-    for (int i = 0; i < sprites.size(); i++) {
-      int key = e.getKeyCode();
+    // controls only work when game is started
+    if (started) {
+      // check sprites for controls
+      for (int i = 0; i < sprites.size(); i++) {
+        int key = e.getKeyCode();
 
-      PlayerSprite s = sprites.get(i);
+        PlayerSprite s = sprites.get(i);
 
-      if (key == s.getUpKey()) {
-        s.setAcc(1);
-      }
-      if (key == s.getDownKey()) {
-        s.setAcc(-1);
-      }
-      if (key == s.getLeftKey()) {
-        // set turning varaible
-        s.setTurn(-1);
-      }
-      if (key == s.getRightKey()) {
-        // set turning varaible
-        s.setTurn(1);
-      }
-      if (key == s.getLightsKey()) {
-        s.toggleLights();
+        if (key == s.getUpKey()) {
+          s.setAcc(1);
+        }
+        if (key == s.getDownKey()) {
+          s.setAcc(-1);
+        }
+        if (key == s.getLeftKey()) {
+          // set turning varaible
+          s.setTurn(-1);
+        }
+        if (key == s.getRightKey()) {
+          // set turning varaible
+          s.setTurn(1);
+        }
+        if (key == s.getLightsKey()) {
+          s.toggleLights();
+        }
       }
     }
   }
   public void keyReleased(KeyEvent e) {
-    // check sprites for controls
-    for (int i = 0; i < sprites.size(); i++) {
-      int key = e.getKeyCode();
+    // controls only work when game is started
+    if (started) {
+      // check sprites for controls
+      for (int i = 0; i < sprites.size(); i++) {
+        int key = e.getKeyCode();
 
-      PlayerSprite s = sprites.get(i);
+        PlayerSprite s = sprites.get(i);
 
-      if (key == s.getUpKey()) {
-        // unset acc variable if already acc this way
-        if (s.getAcc() == 1) {
-          s.setAcc(0);
+        if (key == s.getUpKey()) {
+          // unset acc variable if already acc this way
+          if (s.getAcc() == 1) {
+            s.setAcc(0);
+          }
         }
-      }
-      if (key == s.getDownKey()) {
-        // unset acc variable if already acc this way
-        if (s.getAcc() == -1) {
-          s.setAcc(0);
+        if (key == s.getDownKey()) {
+          // unset acc variable if already acc this way
+          if (s.getAcc() == -1) {
+            s.setAcc(0);
+          }
         }
-      }
-      if (key == s.getLeftKey()) {
-        // unset turning variable if already turning this way
-        if (s.getTurn() == -1) {
-          s.setTurn(0);
+        if (key == s.getLeftKey()) {
+          // unset turning variable if already turning this way
+          if (s.getTurn() == -1) {
+            s.setTurn(0);
+          }
         }
-      }
-      if (key == s.getRightKey()) {
-        // unset turning variable if already turning this way
-        if (s.getTurn() == 1) {
-          s.setTurn(0);
+        if (key == s.getRightKey()) {
+          // unset turning variable if already turning this way
+          if (s.getTurn() == 1) {
+            s.setTurn(0);
+          }
         }
       }
     }
   }
   public void keyTyped(KeyEvent e) {}
-
 }

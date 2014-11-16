@@ -18,6 +18,7 @@
  * Button class.
  */
 
+import java.awt.*;
 import java.awt.Image;
 
 public class Button extends BasicSprite {
@@ -26,6 +27,8 @@ public class Button extends BasicSprite {
   // BASIC PROPERTIES //
   //////////////////////
 
+  int width;
+  int height;
   private String description;
   private Image image;
 
@@ -33,6 +36,8 @@ public class Button extends BasicSprite {
   // ACCESSOR METHODS //
   //////////////////////
 
+  public int getWidth() {return width;}
+  public int getHeight() {return height;}
   public String getDescription() {return description;}
   public Image getImage() {return image;}
 
@@ -40,14 +45,26 @@ public class Button extends BasicSprite {
   // MUTATOR METHODS //
   /////////////////////
 
+  public void setWidth(int width) {this.width = width;}
+  public void setHeight(int height) {this.height = height;}
   public void setDescription(String description) {this.description = description;}
   public void setImage(Image image) {this.image = image;}
+
+  ////////////////////
+  // BUTTON METHODS //
+  ////////////////////
+
+  public void paint(Graphics2D g2d) {
+
+  }
 
   ////////////////////////
   // DEFAULT CONSTUCTOR //
   ////////////////////////
 
   Button() {
+    setWidth(0);
+    setHeight(0);
     setDescription("");
     setImage(null);
   }
