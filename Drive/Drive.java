@@ -55,7 +55,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 20;
+  int PLAYERS = 2;
 
   // create identity transform
   AffineTransform identity = new AffineTransform();
@@ -68,7 +68,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   int mouseButton;
 
   // font for writing things
-  Font font = new Font("Courier", Font.PLAIN, 12);
+  Font font = new Font("Courier", Font.PLAIN, 50);
 
   // framerate counters and other iming variables
   int frameRate = 0, frameCount = 0;
@@ -119,14 +119,26 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     Page main = new Page();
     main.setName("main");
     main.setTitle("Drive: a Kimbertime game.");
-    main.setVisible(false);
+    main.setVisible(true);
+    main.setWidth(w);
+    main.setHeight(h);
+    main.setFont(font);
+
+    Button play = new Button();
+    play.setDescription("Play");
+    main.addButton(play);
+
     pages.add(main);
+    // addButtons(main);
 
     // create settings page
     Page settings = new Page();
     settings.setName("settings");
     settings.setTitle("Settings:");
     settings.setVisible(false);
+    settings.setWidth(w);
+    settings.setHeight(h);
+    settings.setFont(font);
     pages.add(settings);
 
     // create credits page
@@ -134,6 +146,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     credits.setName("credits");
     credits.setTitle("Credits:");
     credits.setVisible(false);
+    credits.setWidth(w);
+    credits.setHeight(h);
+    credits.setFont(font);
     pages.add(credits);
 
     // create pause page
@@ -141,7 +156,16 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     pause.setName("pause");
     pause.setTitle("Game Paused");
     pause.setVisible(false);
+    pause.setWidth(w);
+    pause.setHeight(h);
+    pause.setFont(font);
     pages.add(pause);
+  }
+
+  public void addButtons(Page page) {
+    Button play = new Button();
+    play.setDescription("Play");
+    page.addButton(play);
   }
 
   public void initSprites() {
@@ -178,17 +202,17 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // repaint event draws the backBuffer
   public void paint(Graphics g) {
 
-    // draw the backBuffer to the window
-    g.drawImage(backBuffer, (w / 2) - (int)getAverageX(), (h / 2) - (int)getAverageY(), this);
-
-    // start all transforms at the identity
-    g2d.setTransform(identity);
-
-    // erase the background
-    g2d.setColor(Color.GRAY);
-    g2d.fillRect(-w, -h, (w * 4), (h * 4));
-
     if (started) {
+      // draw the backBuffer to the window
+      g.drawImage(backBuffer, (w / 2) - (int)getAverageX(), (h / 2) - (int)getAverageY(), this);
+
+      // start all transforms at the identity
+      g2d.setTransform(identity);
+
+      // erase the background
+      g2d.setColor(Color.GRAY);
+      g2d.fillRect(-w, -h, (w * 4), (h * 4));
+
       // draw the level
       drawLevel();
 
@@ -196,7 +220,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       drawSprites();
     }
     else {
-      // @TODO draw pages
+      // draw the backBuffer to the window (no offsets for pages)
+      g.drawImage(backBuffer, 0, 0, this);
+
+      drawPages();
     }
   }
 
@@ -231,6 +258,21 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       g2d.setTransform(identity);
       // draw the sprite
       s.paint(g2d);
+    }
+  }
+
+  public void drawPages() {
+
+    // loop through pages
+    for (int i = 0; i < pages.size(); i++) {
+      // load the page
+      Page p = pages.get(i);
+
+      g2d.setTransform(identity);
+      // check if page is being shown
+      if (p.getVisible()) {
+        p.paint(g2d);
+      }
     }
   }
 
@@ -416,11 +458,56 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // MOUSELISTENER METHODS //
   ///////////////////////////
 
-  public void mouseClicked(MouseEvent e) {}
+  public void mouseClicked(MouseEvent e) {
+    // set mouseButton
+    checkButton(e);
+
+    String goTo = "";
+
+    // decide what to do
+    switch (mouseButton) {
+      case 1:
+        // loop through the pages
+        for (int i = 0; i < pages.size(); i++) {
+          // load the page
+          Page p = pages.get(i);
+
+          // if visible, get the buttons
+          if (p.getVisible()) {
+            ArrayList<Button> buttons = p.getButtons();
+
+            for (int j = 0; j < buttons.size(); j++) {
+              Button b = buttons.get(j);
+
+              goTo = b.checkClick(e.getX(), e.getY());
+            }
+          }
+        }
+        break;
+      default:
+        break;
+    }
+
+    switch (goTo) {
+      case "NO":
+        // do nothing
+        break;
+      case "Play":
+        setAllNotVisible();
+        break;
+    }
+  }
   public void mousePressed(MouseEvent e) {}
   public void mouseReleased(MouseEvent e) {}
   public void mouseExited(MouseEvent e) {}
   public void mouseEntered(MouseEvent e) {}
+
+  public void setAllNotVisible() {
+    for (int i = 0; i < pages.size(); i++) {
+      Page p = pages.get(i);
+      p.setVisible(false);
+    }
+  }
 
   /////////////////////////
   // KEYLISTENER METHODS //
@@ -428,29 +515,45 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void keyPressed(KeyEvent e) {
     // controls only work when game is started
+    int key = e.getKeyCode();
     if (started) {
-      // check sprites for controls
-      for (int i = 0; i < sprites.size(); i++) {
-        int key = e.getKeyCode();
 
-        PlayerSprite s = sprites.get(i);
+      // pause on esc
+      if (key == KeyEvent.VK_ESCAPE) {
+        // loop through pages
+        for (int i = 0; i < pages.size(); i++) {
+          // load page
+          Page p = pages.get(i);
 
-        if (key == s.getUpKey()) {
-          s.setAcc(1);
+          // if pause (such a bad way of doing it, must learn hash maps)
+          if (p.getName() == "pause") {
+            p.setVisible(true);
+          }
         }
-        if (key == s.getDownKey()) {
-          s.setAcc(-1);
-        }
-        if (key == s.getLeftKey()) {
-          // set turning varaible
-          s.setTurn(-1);
-        }
-        if (key == s.getRightKey()) {
-          // set turning varaible
-          s.setTurn(1);
-        }
-        if (key == s.getLightsKey()) {
-          s.toggleLights();
+      }
+      else {
+        // check sprites for controls
+        for (int i = 0; i < sprites.size(); i++) {
+
+          PlayerSprite s = sprites.get(i);
+
+          if (key == s.getUpKey()) {
+            s.setAcc(1);
+          }
+          if (key == s.getDownKey()) {
+            s.setAcc(-1);
+          }
+          if (key == s.getLeftKey()) {
+            // set turning varaible
+            s.setTurn(-1);
+          }
+          if (key == s.getRightKey()) {
+            // set turning varaible
+            s.setTurn(1);
+          }
+          if (key == s.getLightsKey()) {
+            s.toggleLights();
+          }
         }
       }
     }

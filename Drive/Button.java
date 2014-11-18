@@ -55,7 +55,31 @@ public class Button extends BasicSprite {
   ////////////////////
 
   public void paint(Graphics2D g2d) {
+    // move into position
+    g2d.translate(getX(), getY());
 
+    // draw the button
+    g2d.setColor(Color.WHITE);
+    g2d.fillRect(0, 0, getWidth(), getHeight());
+
+    // write the description
+    g2d.setColor(Color.BLACK);
+    g2d.drawString(getDescription(), 20, 50);
+
+    // move back
+    g2d.translate(-getX(), -getY());
+  }
+
+  public String checkClick(int x, int y) {
+    // check x coord
+    if ((x > getX()) && x < (getX() + 200)) {
+      // check y coord
+      if ((y > getY()) && y < (getY() + 80)) {
+        return description;
+      }
+    }
+
+    return "NO";
   }
 
   ////////////////////////
@@ -63,8 +87,8 @@ public class Button extends BasicSprite {
   ////////////////////////
 
   Button() {
-    setWidth(0);
-    setHeight(0);
+    setWidth(200);
+    setHeight(80);
     setDescription("");
     setImage(null);
   }
