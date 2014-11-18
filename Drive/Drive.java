@@ -55,7 +55,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 2;
+  int PLAYERS = 20;
 
   // create identity transform
   AffineTransform identity = new AffineTransform();
