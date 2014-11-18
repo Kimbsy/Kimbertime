@@ -75,7 +75,7 @@ public class Button extends BasicSprite {
     if ((x > getX()) && x < (getX() + 200)) {
       // check y coord
       if ((y > getY()) && y < (getY() + 80)) {
-        return description;
+        return getDescription();
       }
     }
 

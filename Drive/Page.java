@@ -85,7 +85,6 @@ public class Page extends BasicSprite {
       // move to a suitable position
       b.setX(getWidth() / 3);
       b.setY((getHeight() / 3) + (i * 90));
-      // g2d.translate((getWidth() / 3), (getHeight() / 3));
 
       // draw it
       b.paint(g2d);

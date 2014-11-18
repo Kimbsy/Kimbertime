@@ -115,6 +115,20 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void initPages() {
+
+    // create buttons
+    Button play_button = new Button();
+    play_button.setDescription("Play");
+
+    Button settings_button = new Button();
+    settings_button.setDescription("Settings");
+
+    Button credits_button = new Button();
+    credits_button.setDescription("Credits");
+
+    Button main_button = new Button();
+    main_button.setDescription("Main");
+
     // create main page
     Page main = new Page();
     main.setName("main");
@@ -124,20 +138,11 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     main.setHeight(h);
     main.setFont(font);
 
-    Button play_button = new Button();
-    play_button.setDescription("Play");
     main.addButton(play_button);
-
-    Button settings_button = new Button();
-    settings_button.setDescription("Settings");
     main.addButton(settings_button);
-
-    Button credits_button = new Button();
-    credits_button.setDescription("Credits");
     main.addButton(credits_button);
 
     pages.add(main);
-    // addButtons(main);
 
     // create settings page
     Page settings = new Page();
@@ -148,8 +153,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     settings.setHeight(h);
     settings.setFont(font);
 
-    Button main_button = new Button();
-    main_button.setDescription("Main");
     settings.addButton(main_button);
 
     pages.add(settings);
@@ -175,7 +178,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     pause.setWidth(w);
     pause.setHeight(h);
     pause.setFont(font);
+
     pause.addButton(play_button);
+
     pages.add(pause);
   }
 
@@ -477,13 +482,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void mouseClicked(MouseEvent e) {
 
-
-
-    // @TODO ALL PAGES ARE DOING THE SAME THING :(
-
-
-
-
     // set mouseButton
     checkButton(e);
 
@@ -504,7 +502,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             for (int j = 0; j < buttons.size(); j++) {
               Button b = buttons.get(j);
 
-              goTo = b.checkClick(e.getX(), e.getY());
+              if (b.checkClick(e.getX(), e.getY()) != "NO") {
+                goTo = b.checkClick(e.getX(), e.getY());
+              }
             }
           }
         }
@@ -512,6 +512,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       default:
         break;
     }
+    System.out.println(goTo);
 
     switch (goTo) {
       case "NO":
@@ -521,8 +522,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
         setAllNotVisible();
         break;
       default:
-        System.out.println(goTo);
-        System.out.println(goTo.toLowerCase());
         openPage(goTo.toLowerCase());
 
     }
@@ -543,6 +542,12 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void openPage(String name) {
+
+    //////////////////////////////
+    // @TODO this isn't working //
+    //////////////////////////////
+
+
     // loop through pages
     for (int i = 0; i < pages.size(); i++) {
       // load page
