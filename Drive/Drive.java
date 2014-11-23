@@ -26,6 +26,13 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.sound.sampled.*;
+
+// sounds
+import java.applet.Applet;
+import java.applet.AudioClip;
+import java.net.URL;
+
 
 public class Drive extends JFrame implements Runnable, MouseListener, KeyListener {
 
@@ -104,6 +111,14 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // create levels
     initLevels();
+
+    // start sounds
+    try {
+      initSounds();
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
 
     // create the backBuffer for some smooth-ass graphics
     backBuffer = new BufferedImage((w * 2), (h * 2), BufferedImage.TYPE_INT_RGB);
@@ -274,6 +289,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     l.setWidth(w * 2);
     l.setHeight(h * 2);
     levels.add(l);
+  }
+
+  public void initSounds() throws Exception {
+    Sound.MENU.loop();
   }
 
   ///////////
