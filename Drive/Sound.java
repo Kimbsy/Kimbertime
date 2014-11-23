@@ -2,7 +2,7 @@ import java.applet.Applet;
 import java.applet.AudioClip;
 
 public class Sound {
-    public static final AudioClip MENU = Applet.newAudioClip(Sound.class.getResource("sound/elevatorMusic.wav"));
+    public static final AudioClip MENU = Applet.newAudioClip(Sound.class.getResource("sound/music/elevatorMusic.wav"));
 
     public static final AudioClip BUMP1 = Applet.newAudioClip(Sound.class.getResource("sound/collision/bump1.wav"));
     public static final AudioClip BUMP2 = Applet.newAudioClip(Sound.class.getResource("sound/collision/bump2.wav"));
@@ -18,5 +18,5 @@ public class Sound {
     public static final AudioClip SCREECH2 = Applet.newAudioClip(Sound.class.getResource("sound/tyres/screech2.wav"));
     public static final AudioClip SCREECH3 = Applet.newAudioClip(Sound.class.getResource("sound/tyres/screech3.wav"));
 
-    // public static final AudioClip GAME = Applet.newAudioClip(Sound.class.getResource("sound/theMetal.wav"));
+    // public static final AudioClip GAME = Applet.newAudioClip(Sound.class.getResource("sound/music/theMetal.wav"));
 }
