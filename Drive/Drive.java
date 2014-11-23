@@ -188,7 +188,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     credits.setHeight(h);
     credits.setFont(font);
     credits.setContentFont(smallFont);
-    credits.setContent("Lead Programmer: Dave Kimber\nConcept: Dave Kimber\nDesign: Dave Kimber\nArtwork: Dave Kimber\nSound: (@TODO put in sound)\nProducer: Dave Kimber\nArtificial Intelligence: (@TODO create AI)");
+    credits.setContent("Lead Programmer: Dave Kimber\nConcept: Dave Kimber\nDesign: Dave Kimber\nArtwork: Dave Kimber\nSound: Dave Kimber\nProducer: Dave Kimber\nArtificial Intelligence: (@TODO create AI)");
     credits.setHasContent(true);
 
     credits.addButton(back_button);
