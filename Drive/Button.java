@@ -30,6 +30,7 @@ public class Button extends BasicSprite {
   int width;
   int height;
   private String description;
+  private String action;
   private Image image;
 
   //////////////////////
@@ -39,6 +40,7 @@ public class Button extends BasicSprite {
   public int getWidth() {return width;}
   public int getHeight() {return height;}
   public String getDescription() {return description;}
+  public String getAction() {return action;}
   public Image getImage() {return image;}
 
   /////////////////////
@@ -48,6 +50,7 @@ public class Button extends BasicSprite {
   public void setWidth(int width) {this.width = width;}
   public void setHeight(int height) {this.height = height;}
   public void setDescription(String description) {this.description = description;}
+  public void setAction(String action) {this.action = action;}
   public void setImage(Image image) {this.image = image;}
 
   ////////////////////
@@ -75,7 +78,7 @@ public class Button extends BasicSprite {
     if ((x > getX()) && x < (getX() + 200)) {
       // check y coord
       if ((y > getY()) && y < (getY() + 80)) {
-        return getDescription();
+        return getAction();
       }
     }
 
@@ -90,6 +93,7 @@ public class Button extends BasicSprite {
     setWidth(200);
     setHeight(80);
     setDescription("");
+    setAction("");
     setImage(null);
   }
 }

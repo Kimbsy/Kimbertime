@@ -85,7 +85,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // default constructor
   public Drive() {
     super("Drive");
-    setSize(w, (h + 32)); // 32 is for JFrame top bar
+    setSize(w, (h/* + 32*/)); // 32 is for JFrame top bar (maybe just for Windows???)
     setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     gameLoop = new Thread(this);
@@ -119,15 +119,19 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     // create buttons
     Button play_button = new Button();
     play_button.setDescription("Play");
+    play_button.setAction("play");
 
     Button settings_button = new Button();
     settings_button.setDescription("Settings");
+    settings_button.setAction("settings");
 
     Button credits_button = new Button();
     credits_button.setDescription("Credits");
+    credits_button.setAction("credits");
 
-    Button main_button = new Button();
-    main_button.setDescription("Main");
+    Button back_button = new Button();
+    back_button.setDescription("Back");
+    back_button.setAction("main");
 
     // create main page
     Page main = new Page();
@@ -153,7 +157,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     settings.setHeight(h);
     settings.setFont(font);
 
-    settings.addButton(main_button);
+    settings.addButton(back_button);
 
     pages.add(settings);
 
@@ -166,7 +170,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     credits.setHeight(h);
     credits.setFont(font);
 
-    credits.addButton(main_button);
+    credits.addButton(back_button);
 
     pages.add(credits);
 
@@ -182,12 +186,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     pause.addButton(play_button);
 
     pages.add(pause);
-  }
-
-  public void addButtons(Page page) {
-    Button play = new Button();
-    play.setDescription("Play");
-    page.addButton(play);
   }
 
   public void initSprites() {
@@ -223,6 +221,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // repaint event draws the backBuffer
   public void paint(Graphics g) {
+
+    // check if started
+    checkStarted();
 
     if (started) {
       // draw the backBuffer to the window
@@ -406,6 +407,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void checkCollisions() {
+
+    // @TODO sprites can sit on top of each other and then can't be hit by anything :/
     
     for (int i = 0; i < sprites.size(); i++) {
       PlayerSprite s1 = sprites.get(i);
@@ -421,11 +424,13 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             double tempY = s1.getVelY();
             double tempFace = s1.getFaceAngle();
 
+            // set s1 to have s2's values
             s1.setVel(s2.getVel());
             s1.setVelX(s2.getVelX());
             s1.setVelY(s2.getVelY());
             s1.setFaceAngle(s2.getFaceAngle());
 
+            // set s2 to have s1's values
             s2.setVel(tempVel);
             s2.setVelX(tempX);
             s2.setVelY(tempY);
@@ -445,10 +450,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public boolean isCollision(double x1, double x2, double y1, double y2, double r) {
     // collisions based on circles (doesn't really need to be more complex)
-    final double a = 2 * r;
-    final double dx = x1 - x2;
-    final double dy = y1 - y2;
-    return a * a > (dx * dx + dy * dy);
+    double d = 2 * r;
+    double dx = x1 - x2;
+    double dy = y1 - y2;
+    return d * d > (dx * dx + dy * dy);
 }
 
   public void checkVictoryConditions() {
@@ -502,7 +507,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             for (int j = 0; j < buttons.size(); j++) {
               Button b = buttons.get(j);
 
+              // if button was clicked (i.e. didn't return "NO")
               if (b.checkClick(e.getX(), e.getY()) != "NO") {
+                // perform corresponding action
                 goTo = b.checkClick(e.getX(), e.getY());
               }
             }
@@ -512,7 +519,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       default:
         break;
     }
-    System.out.println(goTo);
 
     switch (goTo) {
       case "NO":
@@ -522,7 +528,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
         setAllNotVisible();
         break;
       default:
-        openPage(goTo.toLowerCase());
+        openPage(goTo);
+        break;
 
     }
   }
@@ -542,19 +549,12 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void openPage(String name) {
-
-    //////////////////////////////
-    // @TODO this isn't working //
-    //////////////////////////////
-
-
     // loop through pages
     for (int i = 0; i < pages.size(); i++) {
       // load page
       Page p = pages.get(i);
-
-      // ifthe one
-      if (p.getName() == name) {
+      // if the one (strings should use .equals() instead of ==)
+      if (p.getName().equals(name)) {
         // show it
         p.setVisible(true);
       }
