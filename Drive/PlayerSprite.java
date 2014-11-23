@@ -19,6 +19,7 @@
  */
 
 import java.awt.*;
+import java.awt.geom.*;
 import java.awt.event.*;
 
 public class PlayerSprite extends BasicSprite {
@@ -110,6 +111,24 @@ public class PlayerSprite extends BasicSprite {
   ////////////////
   // COLLISIONS //
   ////////////////
+
+  private Shape bounds;
+  public Area getArea() {
+    // create a rectangle in the right place
+    Shape rect = new Rectangle2D.Double(getX(), getY(), WIDTH, HEIGHT);
+
+    // Create a transform. Rotate it and translate it accoring to faceAngle
+    AffineTransform t = new AffineTransform();
+    t.rotate(getFaceAngle(), getX(), getY());
+    t.translate(-(WIDTH / 2), -(HEIGHT / 2));
+
+    // create an area on this shape (with which to check .intersects())
+    Area area = new Area(rect);
+
+    // return transformed area
+    return area.createTransformedArea(t);
+  }
+  public void setBounds(Shape bounds) {this.bounds = bounds;}
   
   private int colTime;
   public int getColTime() {return colTime;}
@@ -223,12 +242,6 @@ public class PlayerSprite extends BasicSprite {
     setVelY(0.0);
     setMoveAngle(0.0);
     setFaceAngle(0.0);
-    setColor(Color.RED);
-    setUpKey(KeyEvent.VK_UP);
-    setDownKey(KeyEvent.VK_DOWN);
-    setLeftKey(KeyEvent.VK_LEFT);
-    setRightKey(KeyEvent.VK_RIGHT);
-    setLightsKey(KeyEvent.VK_CONTROL);
     setTurn(0);
     setAcc(0);
     setLights(false);

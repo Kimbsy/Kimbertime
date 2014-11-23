@@ -43,8 +43,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   Graphics2D g2d;
 
   // frame dimensions
-  int w = 900;
-  int h = 600;
+  int w = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;
+  int h = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
 
   // create page ArrayList
   List<Page> pages = Collections.synchronizedList(new ArrayList<Page>());
@@ -55,7 +55,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 2;
+  int PLAYERS = 4;
 
   // create identity transform
   AffineTransform identity = new AffineTransform();
@@ -86,7 +86,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // default constructor
   public Drive() {
     super("Drive");
-    setSize(w, (h/* + 32*/)); // 32 is for JFrame top bar (maybe just for Windows???)
+    setSize(w, (h)); // 32 is for JFrame top bar
     setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     gameLoop = new Thread(this);
@@ -222,16 +222,49 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       s.setX((w / 2) + (100 * i));
       s.setY((h / 2) + (100));
 
-      // @TODO set up controls properly
-      if (i > 0) {
+      // set up controls
+      if (i < 4) {
+        setStandardControls(s, i);
+      }
+
+      sprites.add(s);
+    }
+  }
+
+  public void setStandardControls(PlayerSprite s, int i) {
+    switch (i) {
+      case 0:
+        s.setColor(Color.RED);
+        s.setUpKey(KeyEvent.VK_UP);
+        s.setDownKey(KeyEvent.VK_DOWN);
+        s.setLeftKey(KeyEvent.VK_LEFT);
+        s.setRightKey(KeyEvent.VK_RIGHT);
+        s.setLightsKey(KeyEvent.VK_CONTROL);
+        break;
+      case 1:
         s.setColor(Color.GREEN);
         s.setUpKey(KeyEvent.VK_W);
         s.setDownKey(KeyEvent.VK_S);
         s.setLeftKey(KeyEvent.VK_A);
         s.setRightKey(KeyEvent.VK_D);
-        s.setLightsKey(KeyEvent.VK_SPACE);
-      }
-      sprites.add(s);
+        s.setLightsKey(KeyEvent.VK_SHIFT);
+        break;
+      case 2:
+        s.setColor(Color.WHITE);
+        s.setUpKey(KeyEvent.VK_U);
+        s.setDownKey(KeyEvent.VK_J);
+        s.setLeftKey(KeyEvent.VK_H);
+        s.setRightKey(KeyEvent.VK_K);
+        s.setLightsKey(KeyEvent.VK_L);
+        break;
+      case 3:
+        s.setColor(Color.BLUE);
+        s.setUpKey(KeyEvent.VK_NUMPAD8);
+        s.setDownKey(KeyEvent.VK_NUMPAD5);
+        s.setLeftKey(KeyEvent.VK_NUMPAD4);
+        s.setRightKey(KeyEvent.VK_NUMPAD6);
+        s.setLightsKey(KeyEvent.VK_NUMPAD0);
+        break;
     }
   }
 
@@ -436,15 +469,36 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void checkCollisions() {
 
-    // @TODO sprites can sit on top of each other and then can't be hit by anything :/
-    
     for (int i = 0; i < sprites.size(); i++) {
       PlayerSprite s1 = sprites.get(i);
       for (int j = 0; j < sprites.size(); j++) {
         PlayerSprite s2 = sprites.get(j);
 
         if (i != j && (s1.getColTime() < 0) && (s2.getColTime() < 0)) {
-          if (isCollision(s1.getX(), s2.getX(), s1.getY(), s2.getY(), 15)) {
+          if (s1.getArea().intersects(s2.getArea().getBounds())) {
+
+            // @TODO sprites can sit on top of each other and then can't be hit by anything :/
+
+            // // move them apart so they dont clip
+            // double dx = Math.abs(s1.getX() - s2.getX());
+            // double dy = Math.abs(s1.getY() - s2.getY());
+
+            // if (s1.getX() < s2.getX()) {
+            //   s1.incX(-((17 - dx) / 2));
+            //   s2.incX((17 - dx) / 2);
+            // }
+            // else if (s1.getX() > s2.getX()) {
+            //   s1.incX((17 - dx) / 2);
+            //   s2.incX(-((17 - dx) / 2));
+            // }
+            // if (s1.getY() < s2.getY()) {
+            //   s1.incY(-((17 - dy) / 2));
+            //   s2.incY((17 - dy) / 2);
+            // }
+            // else if (s1.getY() > s2.getY()) {
+            //   s1.incY(-((17 - dy) / 2));
+            //   s2.incY((17 - dy) / 2);
+            // }
 
             // temporary values so they can switch velocitities and directions
             double tempVel = s1.getVel();
@@ -475,14 +529,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       }
     }
   }
-
-  public boolean isCollision(double x1, double x2, double y1, double y2, double r) {
-    // collisions based on circles (doesn't really need to be more complex)
-    double d = 2 * r;
-    double dx = x1 - x2;
-    double dy = y1 - y2;
-    return d * d > (dx * dx + dy * dy);
-}
 
   public void checkVictoryConditions() {
     // @TODO check if a player has won (too far ahead, crossed finish line)
