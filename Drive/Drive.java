@@ -67,8 +67,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   int mouseX, mouseY;
   int mouseButton;
 
-  // font for writing things
+  // fonts for writing things
   Font font = new Font("Courier", Font.PLAIN, 50);
+  Font smallFont = new Font("Courier", Font.PLAIN, 20);
 
   // framerate counters and other iming variables
   int frameRate = 0, frameCount = 0;
@@ -129,6 +130,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     credits_button.setDescription("Credits");
     credits_button.setAction("credits");
 
+    Button legal_button = new Button();
+    legal_button.setDescription("Legal");
+    legal_button.setAction("legal");
+
     Button back_button = new Button();
     back_button.setDescription("Back");
     back_button.setAction("main");
@@ -148,6 +153,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     main.addButton(play_button);
     main.addButton(settings_button);
     main.addButton(credits_button);
+    main.addButton(legal_button);
 
     pages.add(main);
 
@@ -172,10 +178,29 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     credits.setWidth(w);
     credits.setHeight(h);
     credits.setFont(font);
+    credits.setContentFont(smallFont);
+    credits.setContent("Lead Programmer: Dave Kimber\nConcept: Dave Kimber\nDesign: Dave Kimber\nArtwork: Dave Kimber\nSound: (@TODO put in sound)\nProducer: Dave Kimber\nArtificial Intelligence: (@TODO create AI)");
+    credits.setHasContent(true);
 
     credits.addButton(back_button);
 
     pages.add(credits);
+
+    // create legal page
+    Page legal = new Page();
+    legal.setName("legal");
+    legal.setTitle("Legal:");
+    legal.setVisible(false);
+    legal.setWidth(w);
+    legal.setHeight(h);
+    legal.setFont(font);
+    legal.setContentFont(smallFont);
+    legal.setContent("/***************************************************************************\n* Copyright 2014 Dave Kimber\n* \n* Licensed under the Apache License, Version 2.0 (the \"License\");\n* you may not use this file except in compliance with the License.\n* You may obtain a copy of the License at\n* \n*     http://www.apache.org/licenses/LICENSE-2.0\n* \n* Unless required by applicable law or agreed to in writing, software\n* distributed under the License is distributed on an \"AS IS\" BASIS,\n* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n* See the License for the specific language governing permissions and\n* limitations under the License.\n***************************************************************************/");
+    legal.setHasContent(true);
+
+    legal.addButton(back_button);
+
+    pages.add(legal);
 
     // create pause page
     Page pause = new Page();
@@ -297,7 +322,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       g2d.setTransform(identity);
       // check if page is being shown
       if (p.getVisible()) {
-        p.paint(g2d);
+        p.paint(g2d, identity);
       }
     }
   }

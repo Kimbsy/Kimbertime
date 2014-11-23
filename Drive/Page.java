@@ -19,6 +19,7 @@
  */
 
 import java.awt.*;
+import java.awt.geom.*;
 import java.util.ArrayList;
 
 public class Page extends BasicSprite {
@@ -29,11 +30,14 @@ public class Page extends BasicSprite {
 
   private String name;
   private String title;
+  private String content;
   private ArrayList<Button> buttons = new ArrayList<Button>();
   private boolean visible;
+  private boolean hasContent;
   private int width;
   private int height;
   private Font font;
+  private Font contentFont;
 
   //////////////////////
   // ACCESSOR METHODS //
@@ -41,11 +45,14 @@ public class Page extends BasicSprite {
 
   public String getName() {return name;}
   public String getTitle() {return title;}
+  public String getContent() {return content;}
   public ArrayList<Button> getButtons() {return buttons;}
   public boolean getVisible() {return visible;}
+  public boolean hasContent() {return hasContent;}
   public int getWidth() {return width;}
   public int getHeight() {return height;}
   public Font getFont() {return font;}
+  public Font getContentFont() {return contentFont;}
 
   /////////////////////
   // MUTATOR METHODS //
@@ -53,17 +60,20 @@ public class Page extends BasicSprite {
 
   public void setName(String name) {this.name = name;}
   public void setTitle(String title) {this.title = title;}
+  public void setContent(String content) {this.content = content;}
   public void addButton(Button button) {this.buttons.add(button);}
   public void setVisible(boolean visible) {this.visible = visible;}
+  public void setHasContent(boolean hasContent) {this.hasContent = hasContent;}
   public void setWidth(int width) {this.width = width;}
   public void setHeight(int height) {this.height = height;}
   public void setFont(Font font) {this.font = font;}
+  public void setContentFont(Font contentFont) {this.contentFont = contentFont;}
 
   //////////////////
   // PAGE METHODS //
   //////////////////
   
-  public void paint(Graphics2D g2d) {
+  public void paint(Graphics2D g2d, AffineTransform identity) {
     // draw the page
     g2d.setColor(Color.BLACK);
     g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -75,7 +85,20 @@ public class Page extends BasicSprite {
     g2d.drawString(getTitle(), 0, 0);
 
     // reset the transform
-    g2d.translate(-40, -60);
+    g2d.setTransform(identity);
+
+    // write content
+    if (hasContent()) {
+      String[] cont = getContent().split("\n");
+      g2d.setFont(getContentFont());
+      g2d.translate(40, 120);
+      for (int i = 0; i < cont.length; i++) {
+        g2d.drawString(cont[i], 0, 0);
+        g2d.translate(0, 30);
+      }
+      g2d.setTransform(identity);
+      g2d.setFont(getFont());
+    }
 
     // loop through and draw the buttons
     for (int i = 0; i < getButtons().size(); i++) {
@@ -100,9 +123,12 @@ public class Page extends BasicSprite {
   Page() {
     setName("");
     setTitle("");
+    setContent("");
     setVisible(false);
+    setHasContent(false);
     setWidth(0);
     setHeight(0);
     setFont(null);
+    setContentFont(null);
   }
 }
