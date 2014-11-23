@@ -28,12 +28,6 @@ import java.util.List;
 import javax.swing.*;
 import javax.sound.sampled.*;
 
-// sounds
-import java.applet.Applet;
-import java.applet.AudioClip;
-import java.net.URL;
-
-
 public class Drive extends JFrame implements Runnable, MouseListener, KeyListener {
 
   ///////////
@@ -477,8 +471,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       // update position
       s.updatePos();
 
-      // decay collision timer
+      // decay timers
       s.incColTime(-1);
+      s.incScreechTime(-1);
     }
   }
 
@@ -492,9 +487,21 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       PlayerSprite s1 = sprites.get(i);
       for (int j = 0; j < sprites.size(); j++) {
         PlayerSprite s2 = sprites.get(j);
-
         if (i != j && (s1.getColTime() < 0) && (s2.getColTime() < 0)) {
           if (s1.getArea().intersects(s2.getArea().getBounds())) {
+
+            // play sound
+            switch (rand.nextInt(3)) {
+              case 0:              
+                Sound.BUMP1.play();
+                break;
+              case 1:                
+                Sound.BUMP2.play();
+                break;
+              case 2:                
+                Sound.BUMP3.play();
+                break;
+            }
 
             // @TODO sprites can sit on top of each other and then can't be hit by anything :/
 
@@ -694,6 +701,21 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
           }
           if (key == s.getDownKey()) {
             s.setAcc(-1);
+            // play sound (if havent played in 100 millis and moving forward)
+            if (s.getScreechTime() < 0 && s.getVel() > 0) {
+              switch (rand.nextInt(3)) {
+                case 0:
+                  Sound.SCREECH1.play();
+                  break;
+                case 1:
+                  Sound.SCREECH2.play();
+                  break;
+                case 2:
+                  Sound.SCREECH3.play();
+                  break;
+              }
+              s.setScreechTime(100);
+            }
           }
           if (key == s.getLeftKey()) {
             // set turning varaible

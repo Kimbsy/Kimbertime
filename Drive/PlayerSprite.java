@@ -21,6 +21,7 @@
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class PlayerSprite extends BasicSprite {
 
@@ -33,6 +34,8 @@ public class PlayerSprite extends BasicSprite {
   double MAX_SPEED = 15;
   int WIDTH = 30;
   int HEIGHT = 45;
+
+  Random rand = new Random();
 
   //////////////////////
   // BASIC PROPERTIES //
@@ -59,15 +62,15 @@ public class PlayerSprite extends BasicSprite {
   ///////////////////////////
 
   public void setVel(double vel) {this.vel = vel;}
-  public void incVel(double vel) {this.vel += vel;}
+  public void incVel(double i) {this.vel += i;}
   public void setVelX(double velX) {this.velX = velX;}
-  public void incVelX(double velX) {this.velX += velX;}
+  public void incVelX(double i) {this.velX += i;}
   public void setVelY(double velY) {this.velY = velY;}
-  public void incVelY(double velY) {this.velY += velY;}
+  public void incVelY(double i) {this.velY += i;}
   public void setMoveAngle(double moveAngle) {this.moveAngle = moveAngle;}
-  public void incMoveAngle(double moveAngle) {this.moveAngle += moveAngle; this.moveAngle = (this.moveAngle % 360);}
+  public void incMoveAngle(double i) {this.moveAngle += i; this.moveAngle = (this.moveAngle % 360);}
   public void setFaceAngle(double faceAngle) {this.faceAngle = faceAngle;}
-  public void incFaceAngle(double faceAngle) {this.faceAngle += faceAngle; this.faceAngle = (this.faceAngle % 360);}
+  public void incFaceAngle(double i) {this.faceAngle += i; this.faceAngle = (this.faceAngle % 360);}
   public void setColor(Color color) {this.color = color;}
 
   //////////////
@@ -98,6 +101,11 @@ public class PlayerSprite extends BasicSprite {
   private int acc;
   public int getAcc() {return acc;}
   public void setAcc(int acc) {this.acc = acc;}
+
+  private int screechTime;
+  public int getScreechTime() {return screechTime;}
+  public void setScreechTime(int screechTime) {this.screechTime = screechTime;}
+  public void incScreechTime(int i) {this.screechTime += i;}
 
   /////////////
   // STYLING //
@@ -133,7 +141,7 @@ public class PlayerSprite extends BasicSprite {
   private int colTime;
   public int getColTime() {return colTime;}
   public void setColTime(int colTime) {this.colTime = colTime;}
-  public void incColTime(int colTime) {this.colTime += colTime;}
+  public void incColTime(int i) {this.colTime += i;}
 
   //////////////////////////
   // PLAYERSPRITE METHODS //
@@ -210,6 +218,18 @@ public class PlayerSprite extends BasicSprite {
           // if going forward, brake hard
           if (getVel() > 0) {
             incVel(-(ACC * BRAKING));
+            // play sound
+            // switch (rand.nextInt(3)) {
+            //   case 0:
+            //     Sound.SCREECH1.play();
+            //     break;
+            //   case 1:
+            //     Sound.SCREECH2.play();
+            //     break;
+            //   case 2:
+            //     Sound.SCREECH3.play();
+            //     break;
+            // }
           }
           else {
             incVel(-ACC);
