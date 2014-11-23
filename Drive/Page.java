@@ -82,9 +82,11 @@ public class Page extends BasicSprite {
       // load the button
       Button b = getButtons().get(i);
 
-      // move to a suitable position
-      b.setX(getWidth() / 3);
-      b.setY((getHeight() / 3) + (i * 90));
+      if (!b.isPositioned()) {
+        // move to a suitable position
+        b.setX(getWidth() / 3);
+        b.setY((getHeight() / 3) + (i * 90));
+      }
 
       // draw it
       b.paint(g2d);

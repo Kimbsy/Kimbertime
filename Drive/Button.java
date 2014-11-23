@@ -32,6 +32,7 @@ public class Button extends BasicSprite {
   private String description;
   private String action;
   private Image image;
+  private boolean positioned;
 
   //////////////////////
   // ACCESSOR METHODS //
@@ -42,6 +43,7 @@ public class Button extends BasicSprite {
   public String getDescription() {return description;}
   public String getAction() {return action;}
   public Image getImage() {return image;}
+  public boolean isPositioned() {return positioned;}
 
   /////////////////////
   // MUTATOR METHODS //
@@ -52,6 +54,7 @@ public class Button extends BasicSprite {
   public void setDescription(String description) {this.description = description;}
   public void setAction(String action) {this.action = action;}
   public void setImage(Image image) {this.image = image;}
+  public void setPositioned(boolean positioned) {this.positioned = positioned;}
 
   ////////////////////
   // BUTTON METHODS //
@@ -95,5 +98,6 @@ public class Button extends BasicSprite {
     setDescription("");
     setAction("");
     setImage(null);
+    setPositioned(false);
   }
 }

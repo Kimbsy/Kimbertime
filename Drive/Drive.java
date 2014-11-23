@@ -132,6 +132,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     Button back_button = new Button();
     back_button.setDescription("Back");
     back_button.setAction("main");
+    back_button.setX(w / 10);
+    back_button.setY(h - (h / 6));
+    back_button.setPositioned(true);
 
     // create main page
     Page main = new Page();
@@ -521,6 +524,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     }
 
     switch (goTo) {
+      case "":
+        // do nothing
+        break;
       case "NO":
         // do nothing
         break;
