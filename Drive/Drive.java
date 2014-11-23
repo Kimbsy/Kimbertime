@@ -504,6 +504,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             }
 
             // @TODO sprites can sit on top of each other and then can't be hit by anything :/
+            // ^^^^^^^^^^^^^^^^^THIS IS CRASHING IT SOMEHOW (cant see fo all the nullpointerexceptions :/)
+
+            // @TODO Collisions are unsatifactory
 
             // // move them apart so they dont clip
             // double dx = Math.abs(s1.getX() - s2.getX());
@@ -530,26 +533,26 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             double tempVel = s1.getVel();
             double tempX = s1.getVelX();
             double tempY = s1.getVelY();
-            double tempFace = s1.getFaceAngle();
+            // double tempFace = s1.getFaceAngle();
 
             // set s1 to have s2's values
             s1.setVel(s2.getVel());
             s1.setVelX(s2.getVelX());
             s1.setVelY(s2.getVelY());
-            s1.setFaceAngle(s2.getFaceAngle());
+            // s1.setFaceAngle(s2.getFaceAngle());
 
             // set s2 to have s1's values
             s2.setVel(tempVel);
             s2.setVelX(tempX);
             s2.setVelY(tempY);
-            s2.setFaceAngle(tempFace);
-
-            // update so positions change to avoid clipping
-            updateSprites();
+            // s2.setFaceAngle(tempFace);
 
             // collision delay
             s1.setColTime(30);
             s2.setColTime(30);
+
+            // update so positions change to avoid clipping
+            updateSprites();
           }
         }
       }

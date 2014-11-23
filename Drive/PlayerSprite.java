@@ -243,9 +243,11 @@ public class PlayerSprite extends BasicSprite {
       setVel(0);
     }
 
-    // calculate actual X and Y velocities
-    setVelX(getVel() * (Math.cos(Math.toRadians(getFaceAngle()))));
-    setVelY(getVel() * (Math.sin(Math.toRadians(getFaceAngle()))));
+    // calculate actual X and Y velocities (dont turn if has just collided)
+    if (getColTime() < 0) {
+      setVelX(getVel() * (Math.cos(Math.toRadians(getFaceAngle()))));
+      setVelY(getVel() * (Math.sin(Math.toRadians(getFaceAngle()))));
+    }
   }
 
   public void updatePos() {
