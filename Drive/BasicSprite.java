@@ -38,9 +38,9 @@ public class BasicSprite {
   ///////////////////////////
 
   public void setX(double x) {this.x = x;}
-  public void incX(double x) {this.x += x;}
+  public void incX(double i) {this.x += i;}
   public void setY(double y) {this.y = y;}
-  public void incY(double y) {this.y += y;}
+  public void incY(double i) {this.y += i;}
 
   ////////////////////////
   // DEFAULT CONSTUCTOR //

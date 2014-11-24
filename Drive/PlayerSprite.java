@@ -143,6 +143,20 @@ public class PlayerSprite extends BasicSprite {
   public void setColTime(int colTime) {this.colTime = colTime;}
   public void incColTime(int i) {this.colTime += i;}
 
+  private double slide;
+  public double getSlide() {return slide;}
+  public void setSlide(double slide) {this.slide = slide;}
+  public void incSlide(double i) {this.slide += i;}
+
+  /////////////
+  // SCORING //
+  /////////////
+
+  private int score;
+  public int getScore() {return score;}
+  public void setScore(int score) {this.score = score;}
+  public void incScore(int i) {this.score += i;}
+
   //////////////////////////
   // PLAYERSPRITE METHODS //
   //////////////////////////
@@ -243,10 +257,39 @@ public class PlayerSprite extends BasicSprite {
       setVel(0);
     }
 
-    // calculate actual X and Y velocities (dont turn if has just collided)
-    if (getColTime() < 0) {
+    // calculate actual X and Y velocities
+    if (getSlide() < 1) {
       setVelX(getVel() * (Math.cos(Math.toRadians(getFaceAngle()))));
       setVelY(getVel() * (Math.sin(Math.toRadians(getFaceAngle()))));
+    }
+    // if sliding, turn car to face velocity vector
+    else {
+
+
+
+      ///////////////////////////
+      // @TODO THIS NEEDS WORK //
+      ///////////////////////////
+
+      // Collisions don't work while driving backwards :/
+      // Vel should invert if sliding backwards
+
+
+
+      // calculate taget faceAngle
+      double targetAngle = Math.toDegrees(Math.atan((Math.toRadians(getVelY())) / (Math.toRadians(getVelX()))));
+
+      System.out.println((targetAngle % 360) + ", " + getFaceAngle());
+
+      // need to increase or decrease faceAngle
+      boolean increase = (targetAngle % 360) > getFaceAngle();
+
+      if (increase) {
+        incFaceAngle(1);
+      }
+      else {
+        incFaceAngle(-1);
+      }
     }
   }
 
@@ -267,5 +310,8 @@ public class PlayerSprite extends BasicSprite {
     setTurn(0);
     setAcc(0);
     setLights(false);
+    setColTime(0);
+    setSlide(0);
+    setScore(0);
   }
 }

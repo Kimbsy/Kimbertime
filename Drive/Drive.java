@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
-import javax.sound.sampled.*;
+// import javax.sound.sampled.*;
 
 public class Drive extends JFrame implements Runnable, MouseListener, KeyListener {
 
@@ -286,7 +286,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void initSounds() throws Exception {
-    Sound.MENU.loop();
+    // Sound.MENU.loop();
   }
 
   ///////////
@@ -315,6 +315,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
       // draw the sprites
       drawSprites();
+
+      // draw the scores
+      drawScores();
     }
     else {
       // draw the backBuffer to the window (no offsets for pages)
@@ -356,6 +359,26 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       // draw the sprite
       s.paint(g2d);
     }
+  }
+
+  public void drawScores() {
+    // loop through the sprites
+    for (int i = 0; i < sprites.size(); i++) {
+      // load them
+      PlayerSprite s = sprites.get(i);
+
+      // always the identity
+      g2d.setTransform(identity);
+
+      // want to stay with camera
+      g2d.translate((int)getAverageX() - (w / 2), (int)getAverageY() - (h / 2));
+
+      // set corresponing color
+      g2d.setColor(s.getColor());
+      // draw the scores
+      g2d.drawString(Integer.toString(s.getScore()), (i * 50) + 10, 50);
+
+    } 
   }
 
   public void drawPages() {
@@ -472,8 +495,15 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       s.updatePos();
 
       // decay timers
-      s.incColTime(-1);
-      s.incScreechTime(-1);
+      if (s.getColTime() >= 0) {      
+        s.incColTime(-1);
+      }
+      if (s.getSlide() >= 0) {        
+        s.incSlide(-1);
+      }
+      if (s.getScreechTime() >= 0) {        
+        s.incScreechTime(-1);
+      }
     }
   }
 
@@ -493,13 +523,13 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             // play sound
             switch (rand.nextInt(3)) {
               case 0:              
-                Sound.BUMP1.play();
+                // Sound.BUMP1.play();
                 break;
               case 1:                
-                Sound.BUMP2.play();
+                // Sound.BUMP2.play();
                 break;
               case 2:                
-                Sound.BUMP3.play();
+                // Sound.BUMP3.play();
                 break;
             }
 
@@ -508,25 +538,56 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
             // @TODO Collisions are unsatifactory
 
+
+            while (s1.getArea().intersects(s2.getArea().getBounds())) {
+              if (s1.getX() > s2.getX()) {
+                s1.incX(1);
+                s2.incX(-1);
+              }
+              else if (s1.getX() < s2.getX()) {
+                s1.incX(-1);
+                s2.incX(1);
+              }
+              if (s1.getY() > s2.getY()) {
+                s1.incY(-1);
+                s2.incY(1);
+              }
+              else if (s1.getY() < s2.getY()) {
+                s1.incY(1);
+                s2.incY(-1);
+              }
+            }
+
+
+/*
+                     ^
+                     |
+            this one | works muck better then this one |
+                                                       |
+                                                       V
+*/
+
+
+
             // // move them apart so they dont clip
             // double dx = Math.abs(s1.getX() - s2.getX());
             // double dy = Math.abs(s1.getY() - s2.getY());
 
-            // if (s1.getX() < s2.getX()) {
-            //   s1.incX(-((17 - dx) / 2));
-            //   s2.incX((17 - dx) / 2);
+            // if (s1.getX() > s2.getX()) {
+            //   s1.incX(-((30 - dx) / 2));
+            //   s2.incX((30 - dx) / 2);
             // }
-            // else if (s1.getX() > s2.getX()) {
-            //   s1.incX((17 - dx) / 2);
-            //   s2.incX(-((17 - dx) / 2));
+            // else if (s1.getX() < s2.getX()) {
+            //   s1.incX((30 - dx) / 2);
+            //   s2.incX(-((30 - dx) / 2));
             // }
-            // if (s1.getY() < s2.getY()) {
-            //   s1.incY(-((17 - dy) / 2));
-            //   s2.incY((17 - dy) / 2);
+            // if (s1.getY() > s2.getY()) {
+            //   s1.incY(-((30 - dy) / 2));
+            //   s2.incY((30 - dy) / 2);
             // }
-            // else if (s1.getY() > s2.getY()) {
-            //   s1.incY(-((17 - dy) / 2));
-            //   s2.incY((17 - dy) / 2);
+            // else if (s1.getY() < s2.getY()) {
+            //   s1.incY((30 - dy) / 2);
+            //   s2.incY(-((30 - dy) / 2));
             // }
 
             // temporary values so they can switch velocitities and directions
@@ -548,8 +609,12 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             // s2.setFaceAngle(tempFace);
 
             // collision delay
-            s1.setColTime(30);
-            s2.setColTime(30);
+            s1.setColTime(5);
+            s2.setColTime(5);
+
+            // cars will slide
+            s1.setSlide(4 * s1.getVel());
+            s2.setSlide(4 * s2.getVel());
 
             // update so positions change to avoid clipping
             updateSprites();
@@ -708,13 +773,13 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             if (s.getScreechTime() < 0 && s.getVel() > 0) {
               switch (rand.nextInt(3)) {
                 case 0:
-                  Sound.SCREECH1.play();
+                  // Sound.SCREECH1.play();
                   break;
                 case 1:
-                  Sound.SCREECH2.play();
+                  // Sound.SCREECH2.play();
                   break;
                 case 2:
-                  Sound.SCREECH3.play();
+                  // Sound.SCREECH3.play();
                   break;
               }
               s.setScreechTime(100);
