@@ -1,16 +1,20 @@
 TODO
 
-levels:
+Levels:
   drag race
   circuit race
   sumo
   sweepers
   demolition derby
 
-need to make borders
+Need to make borders
 
-need to figure out how to do circuit
+Need to figure out how to do circuit
 
-need to make damage visible
+Need to make damage visible
 
-need collisions to work properly
+Need collisions to work properly
+  // cars need to turn the right way
+  vel needs to be the correct polarity at the end of the slide
+
+Need tp stop sounds from crashing game

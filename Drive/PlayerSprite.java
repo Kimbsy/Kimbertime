@@ -68,9 +68,9 @@ public class PlayerSprite extends BasicSprite {
   public void setVelY(double velY) {this.velY = velY;}
   public void incVelY(double i) {this.velY += i;}
   public void setMoveAngle(double moveAngle) {this.moveAngle = moveAngle;}
-  public void incMoveAngle(double i) {this.moveAngle += i; this.moveAngle = (this.moveAngle % 360);}
+  public void incMoveAngle(double i) {this.moveAngle = (i + this.moveAngle) % 360;}
   public void setFaceAngle(double faceAngle) {this.faceAngle = faceAngle;}
-  public void incFaceAngle(double i) {this.faceAngle += i; this.faceAngle = (this.faceAngle % 360);}
+  public void incFaceAngle(double i) {this.faceAngle = (i + this.faceAngle) % 360;}
   public void setColor(Color color) {this.color = color;}
 
   //////////////
@@ -147,6 +147,14 @@ public class PlayerSprite extends BasicSprite {
   public double getSlide() {return slide;}
   public void setSlide(double slide) {this.slide = slide;}
   public void incSlide(double i) {this.slide += i;}
+
+  // reset vel based on velX and velY
+  public void resetVel() {
+    // setVel(Math.sqrt(Math.pow(getVelX(), 2) + Math.pow(getVelY(), 2)));
+    
+    // @TODO this should figure out if the car is sliding backwards and flip vel if neccessary
+    // shouldn't this happen at the end of the slide?
+  }
 
   /////////////
   // SCORING //
@@ -262,27 +270,14 @@ public class PlayerSprite extends BasicSprite {
       setVelX(getVel() * (Math.cos(Math.toRadians(getFaceAngle()))));
       setVelY(getVel() * (Math.sin(Math.toRadians(getFaceAngle()))));
     }
-    // if sliding, turn car to face velocity vector
+    // if sliding, turn car to face velocity vector (either forwards or backwards, whichever is closest)
     else {
-
-
-
-      ///////////////////////////
-      // @TODO THIS NEEDS WORK //
-      ///////////////////////////
-
-      // Collisions don't work while driving backwards :/
-      // Vel should invert if sliding backwards
-
-
 
       // calculate taget faceAngle
       double targetAngle = Math.toDegrees(Math.atan((Math.toRadians(getVelY())) / (Math.toRadians(getVelX()))));
 
-      System.out.println((targetAngle % 360) + ", " + getFaceAngle());
-
       // need to increase or decrease faceAngle
-      boolean increase = (targetAngle % 360) > getFaceAngle();
+      boolean increase = (targetAngle % 360) > (getFaceAngle() % 360);
 
       if (increase) {
         incFaceAngle(1);

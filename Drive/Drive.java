@@ -613,11 +613,15 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             s2.setColTime(5);
 
             // cars will slide
-            s1.setSlide(4 * s1.getVel());
-            s2.setSlide(4 * s2.getVel());
+            s1.setSlide(4 * Math.abs(s1.getVel()));
+            s2.setSlide(4 * Math.abs(s2.getVel()));
 
             // update so positions change to avoid clipping
             updateSprites();
+
+            // reset vel for each sprite (to fix when sliding backwards)
+            s1.updateVel();
+            s2.updateVel();
           }
         }
       }
