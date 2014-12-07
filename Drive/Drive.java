@@ -26,7 +26,6 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
-// import javax.sound.sampled.*;
 
 public class Drive extends JFrame implements Runnable, MouseListener, KeyListener {
 
@@ -286,7 +285,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void initSounds() throws Exception {
-    // Sound.MENU.loop();
+    Sound.MENU.loop();
   }
 
   ///////////
@@ -525,18 +524,15 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             // play sound
             switch (rand.nextInt(3)) {
               case 0:              
-                // Sound.BUMP1.play();
+                Sound.BUMP1.play();
                 break;
               case 1:                
-                // Sound.BUMP2.play();
+                Sound.BUMP2.play();
                 break;
               case 2:                
-                // Sound.BUMP3.play();
+                Sound.BUMP3.play();
                 break;
             }
-
-            // @TODO sprites can sit on top of each other and then can't be hit by anything :/
-            // ^^^^^^^^^^^^^^^^^THIS IS CRASHING IT SOMEHOW (cant see fo all the nullpointerexceptions :/)
 
             while (s1.getArea().intersects(s2.getArea().getBounds())) {
               if (s1.getX() > s2.getX()) {
@@ -735,21 +731,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
           }
           if (key == s.getDownKey()) {
             s.setAcc(-1);
-            // play sound (if havent played in 100 millis and moving forward)
-            if (s.getScreechTime() < 0 && s.getVel() > 0) {
-              switch (rand.nextInt(3)) {
-                case 0:
-                  // Sound.SCREECH1.play();
-                  break;
-                case 1:
-                  // Sound.SCREECH2.play();
-                  break;
-                case 2:
-                  // Sound.SCREECH3.play();
-                  break;
-              }
-              s.setScreechTime(100);
-            }
           }
           if (key == s.getLeftKey()) {
             // set turning varaible

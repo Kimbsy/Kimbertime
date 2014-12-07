@@ -250,18 +250,21 @@ public class PlayerSprite extends BasicSprite {
             // if going forward, brake hard
             if (getVel() > 0) {
               incVel(-(ACC * BRAKING));
-              // play sound
-              // switch (rand.nextInt(3)) {
-              //   case 0:
-              //     Sound.SCREECH1.play();
-              //     break;
-              //   case 1:
-              //     Sound.SCREECH2.play();
-              //     break;
-              //   case 2:
-              //     Sound.SCREECH3.play();
-              //     break;
-              // }
+              // play sound (if havent played in 100 millis)
+              if (getScreechTime() < 0) {
+                switch (rand.nextInt(3)) {
+                  case 0:
+                    Sound.SCREECH1.play();
+                    break;
+                  case 1:
+                    Sound.SCREECH2.play();
+                    break;
+                  case 2:
+                    Sound.SCREECH3.play();
+                    break;
+                }
+                setScreechTime(100);
+              }
             }
             else {
               incVel(-ACC);
@@ -317,6 +320,7 @@ public class PlayerSprite extends BasicSprite {
             }
           }
 
+          // do the "mod" again
           if (targetAngle < 0) {
             targetAngle = 360 + targetAngle;
           }
@@ -325,8 +329,6 @@ public class PlayerSprite extends BasicSprite {
           if (Math.abs(targetAngle - getFaceAngle()) > 90) {
             setVel(-getVel());
           }
-
-          System.out.println((int)getVelX() + ", " + (int)getVelY() + " / " + getFaceAngle() + " / " + targetAngle);
         }
 
         // have now stopped sliding
@@ -338,7 +340,6 @@ public class PlayerSprite extends BasicSprite {
     }
     // if sliding, turn car to face velocity vector (either forwards or backwards, whichever is closest)
     else {
-
       // calculate target faceAngle
       double targetAngle = Math.toDegrees(Math.atan(getVelY() / getVelX()));
 
