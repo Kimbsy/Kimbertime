@@ -13,8 +13,8 @@ Need to figure out how to do circuit
 
 Need to make damage visible
 
-Need collisions to work properly
+// Need collisions to work properly
   // cars need to turn the right way
-  vel needs to be the correct polarity at the end of the slide
+  // vel needs to be the correct polarity at the end of the slide
 
-Need tp stop sounds from crashing game
+Need to stop sounds from crashing game

@@ -68,9 +68,21 @@ public class PlayerSprite extends BasicSprite {
   public void setVelY(double velY) {this.velY = velY;}
   public void incVelY(double i) {this.velY += i;}
   public void setMoveAngle(double moveAngle) {this.moveAngle = moveAngle;}
-  public void incMoveAngle(double i) {this.moveAngle = (i + this.moveAngle) % 360;}
+  public void incMoveAngle(double i) {
+    this.moveAngle = (this.moveAngle + i);
+    if (this.moveAngle < 0) {
+      // beth noticed this is bad (what if -370?)
+      this.moveAngle = 360 + this.moveAngle;
+    }
+  }
   public void setFaceAngle(double faceAngle) {this.faceAngle = faceAngle;}
-  public void incFaceAngle(double i) {this.faceAngle = (i + this.faceAngle) % 360;}
+  public void incFaceAngle(double i) {
+    this.faceAngle = (this.faceAngle + i);
+    if (this.faceAngle < 0) {
+      // beth noticed this is bad (what if -370?)
+      this.faceAngle = 360 + this.faceAngle;
+    }
+  }
   public void setColor(Color color) {this.color = color;}
 
   //////////////
@@ -148,13 +160,10 @@ public class PlayerSprite extends BasicSprite {
   public void setSlide(double slide) {this.slide = slide;}
   public void incSlide(double i) {this.slide += i;}
 
-  // reset vel based on velX and velY
-  public void resetVel() {
-    // setVel(Math.sqrt(Math.pow(getVelX(), 2) + Math.pow(getVelY(), 2)));
-    
-    // @TODO this should figure out if the car is sliding backwards and flip vel if neccessary
-    // shouldn't this happen at the end of the slide?
-  }
+  private boolean sliding;
+  public boolean isSliding() {return sliding;}
+  public void setSliding(boolean sliding) {this.sliding = sliding;}
+  public void toggleSliding() {this.sliding = !isSliding();}
 
   /////////////
   // SCORING //
@@ -218,46 +227,56 @@ public class PlayerSprite extends BasicSprite {
   }
 
   public void updateVel() {
-    switch(acc) {
-      // if neither held tend towards 0
-      case 0:
-        if (getVel() > 0) {
-          incVel(-ACC);
-        }
-        else if (getVel() < 0) {
-          incVel(ACC);
-        }
-        break;
-      // if forward speed up
-      case 1:
-        if (getVel() < MAX_SPEED) {
-          incVel(ACC);
-        }
-        break;
-      // if backward slow down
-      case -1:
-        if (getVel() > (-MAX_SPEED)) {
-          // if going forward, brake hard
+    if (!isSliding()) {
+      switch(acc) {
+        // if neither held tend towards 0
+        case 0:
           if (getVel() > 0) {
-            incVel(-(ACC * BRAKING));
-            // play sound
-            // switch (rand.nextInt(3)) {
-            //   case 0:
-            //     Sound.SCREECH1.play();
-            //     break;
-            //   case 1:
-            //     Sound.SCREECH2.play();
-            //     break;
-            //   case 2:
-            //     Sound.SCREECH3.play();
-            //     break;
-            // }
-          }
-          else {
             incVel(-ACC);
           }
-        }
-        break;
+          else if (getVel() < 0) {
+            incVel(ACC);
+          }
+          break;
+        // if forward speed up
+        case 1:
+          if (getVel() < MAX_SPEED) {
+            incVel(ACC);
+          }
+          break;
+        // if backward slow down
+        case -1:
+          if (getVel() > (-MAX_SPEED)) {
+            // if going forward, brake hard
+            if (getVel() > 0) {
+              incVel(-(ACC * BRAKING));
+              // play sound
+              // switch (rand.nextInt(3)) {
+              //   case 0:
+              //     Sound.SCREECH1.play();
+              //     break;
+              //   case 1:
+              //     Sound.SCREECH2.play();
+              //     break;
+              //   case 2:
+              //     Sound.SCREECH3.play();
+              //     break;
+              // }
+            }
+            else {
+              incVel(-ACC);
+            }
+          }
+          break;
+      }
+    }
+    else {
+      if (getVel() > 0) {
+        incVel(-ACC);
+      }
+      else if (getVel() < 0) {
+        incVel(ACC);
+      }
     }
 
     // get rid of rounding errors
@@ -267,14 +286,61 @@ public class PlayerSprite extends BasicSprite {
 
     // calculate actual X and Y velocities
     if (getSlide() < 1) {
+
+      // if just finished sliding
+      if (isSliding()) {
+        // make sure vel is pointing in the right direcion
+
+        if (getVelX() != 0 && getVelY() != 0) {
+          double targetAngle = Math.toDegrees(Math.atan(getVelY() / getVelX()));
+          // mod doean't work :/
+          if (targetAngle < 0) {
+            targetAngle = 360 + targetAngle;
+          }
+
+          // horrible way to check face angle against true move angle
+          if (getVelY() > 0 && targetAngle > 180) {
+            targetAngle -= 180;
+          }
+          else if (getVelY() > 180 && targetAngle < 180) {
+            targetAngle += 180;
+          }
+
+          if (getVelX() > 0) {
+            if (targetAngle > 90 && targetAngle < 270) {
+              targetAngle -= 180;
+            }
+          }
+          else if (getVelX() < 0) {
+            if (targetAngle < 90 || targetAngle > 270) {
+              targetAngle -= 180;
+            }
+          }
+
+          if (targetAngle < 0) {
+            targetAngle = 360 + targetAngle;
+          }
+          
+          // flip velocity if facing wrong way
+          if (Math.abs(targetAngle - getFaceAngle()) > 90) {
+            setVel(-getVel());
+          }
+
+          System.out.println((int)getVelX() + ", " + (int)getVelY() + " / " + getFaceAngle() + " / " + targetAngle);
+        }
+
+        // have now stopped sliding
+        toggleSliding();
+      }
+
       setVelX(getVel() * (Math.cos(Math.toRadians(getFaceAngle()))));
       setVelY(getVel() * (Math.sin(Math.toRadians(getFaceAngle()))));
     }
     // if sliding, turn car to face velocity vector (either forwards or backwards, whichever is closest)
     else {
 
-      // calculate taget faceAngle
-      double targetAngle = Math.toDegrees(Math.atan((Math.toRadians(getVelY())) / (Math.toRadians(getVelX()))));
+      // calculate target faceAngle
+      double targetAngle = Math.toDegrees(Math.atan(getVelY() / getVelX()));
 
       // need to increase or decrease faceAngle
       boolean increase = (targetAngle % 360) > (getFaceAngle() % 360);
@@ -307,6 +373,7 @@ public class PlayerSprite extends BasicSprite {
     setLights(false);
     setColTime(0);
     setSlide(0);
+    setSliding(false);
     setScore(0);
   }
 }

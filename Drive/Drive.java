@@ -485,6 +485,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       // load the sprite
       PlayerSprite s = sprites.get(i);
 
+      s.setScore((int)(s.getFaceAngle()));
+
       // update faceAngle
       s.incFaceAngle((s.getTurn() * 5));
 
@@ -536,9 +538,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             // @TODO sprites can sit on top of each other and then can't be hit by anything :/
             // ^^^^^^^^^^^^^^^^^THIS IS CRASHING IT SOMEHOW (cant see fo all the nullpointerexceptions :/)
 
-            // @TODO Collisions are unsatifactory
-
-
             while (s1.getArea().intersects(s2.getArea().getBounds())) {
               if (s1.getX() > s2.getX()) {
                 s1.incX(1);
@@ -558,55 +557,20 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
               }
             }
 
-
-/*
-                     ^
-                     |
-            this one | works muck better then this one |
-                                                       |
-                                                       V
-*/
-
-
-
-            // // move them apart so they dont clip
-            // double dx = Math.abs(s1.getX() - s2.getX());
-            // double dy = Math.abs(s1.getY() - s2.getY());
-
-            // if (s1.getX() > s2.getX()) {
-            //   s1.incX(-((30 - dx) / 2));
-            //   s2.incX((30 - dx) / 2);
-            // }
-            // else if (s1.getX() < s2.getX()) {
-            //   s1.incX((30 - dx) / 2);
-            //   s2.incX(-((30 - dx) / 2));
-            // }
-            // if (s1.getY() > s2.getY()) {
-            //   s1.incY(-((30 - dy) / 2));
-            //   s2.incY((30 - dy) / 2);
-            // }
-            // else if (s1.getY() < s2.getY()) {
-            //   s1.incY((30 - dy) / 2);
-            //   s2.incY(-((30 - dy) / 2));
-            // }
-
             // temporary values so they can switch velocitities and directions
             double tempVel = s1.getVel();
             double tempX = s1.getVelX();
             double tempY = s1.getVelY();
-            // double tempFace = s1.getFaceAngle();
 
             // set s1 to have s2's values
-            s1.setVel(s2.getVel());
+            s1.setVel(Math.abs(s2.getVel()));
             s1.setVelX(s2.getVelX());
             s1.setVelY(s2.getVelY());
-            // s1.setFaceAngle(s2.getFaceAngle());
 
             // set s2 to have s1's values
-            s2.setVel(tempVel);
+            s2.setVel(Math.abs(tempVel));
             s2.setVelX(tempX);
             s2.setVelY(tempY);
-            // s2.setFaceAngle(tempFace);
 
             // collision delay
             s1.setColTime(5);
@@ -615,13 +579,11 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             // cars will slide
             s1.setSlide(4 * Math.abs(s1.getVel()));
             s2.setSlide(4 * Math.abs(s2.getVel()));
+            s1.setSliding(true);
+            s2.setSliding(true);
 
             // update so positions change to avoid clipping
             updateSprites();
-
-            // reset vel for each sprite (to fix when sliding backwards)
-            s1.updateVel();
-            s2.updateVel();
           }
         }
       }
