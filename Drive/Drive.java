@@ -55,7 +55,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 4;
+  int PLAYERS = 2;
+
+  // create walls/collision-objects ArrayList
+  List<Wall> walls = Collections.synchronizedList(new ArrayList<Wall>());
 
   // create identity transform
   AffineTransform identity = new AffineTransform();
@@ -107,7 +110,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // start sounds
     try {
-      initSounds();
+      // initSounds();
     }
     catch (Exception e) {
       e.printStackTrace();
@@ -516,6 +519,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     for (int i = 0; i < sprites.size(); i++) {
       PlayerSprite s1 = sprites.get(i);
+
+      // collisions with other sprites
       for (int j = 0; j < sprites.size(); j++) {
         PlayerSprite s2 = sprites.get(j);
         if (i != j && (s1.getColTime() < 0) && (s2.getColTime() < 0)) {
@@ -583,6 +588,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
           }
         }
       }
+
+
+      // collisions with walls
+      
     }
   }
 

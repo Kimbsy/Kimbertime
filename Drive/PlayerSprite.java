@@ -105,6 +105,8 @@ public class PlayerSprite extends BasicSprite {
   public int getLightsKey() {return lightsKey;}
   public void setLightsKey(int lightsKey) {this.lightsKey = lightsKey;}
 
+  private double maxSpeed;
+  public double getMaxSpeed() {return maxSpeed;}
 
   private int turn;
   public int getTurn() {return turn;}
