@@ -25,4 +25,68 @@ import java.util.*;
 
 public class Wall extends BasicSprite {
 
+  ////////////////
+  // DIMENSIONS //
+  ////////////////
+  
+  private int width;
+  public int getWidth() {return width;}
+  public void setWidth(int width) {this.width = width;}
+
+  private int height;
+  public int getHeight() {return height;}
+  public void setHeight(int height) {this.height = height;}
+
+  ////////////////
+  // VISIBILITY //
+  ////////////////
+
+  private boolean visible;
+  public boolean isVisible() {return visible;}
+  public void setVisible(boolean visible) {this.visible = visible;}
+
+  public void paint(Graphics2D g2d) {
+    if (isVisible()) {
+      // move to position
+      g2d.translate(getX(), getY());
+
+      // draw wall
+      g2d.setColor(Color.RED);
+      g2d.drawRect(0, 0, getWidth(), getHeight());
+
+      // move back
+      g2d.translate(-getX(), -getY());
+    }
+  }
+
+  ///////////////
+  // COLISIONS //
+  ///////////////
+
+  private Shape bounds;
+  public Area getArea() {
+    // create a rectangle in the right place
+    Shape rect = new Rectangle2D.Double(getX(), getY(), getWidth(), getHeight());
+
+    // create an area on this shape (with which to check .intersects())
+    Area area = new Area(rect);
+
+    // return area
+    return area;
+  }
+  public void setBounds(Shape bounds) {this.bounds = bounds;}
+
+  /////////////////
+  // ORIENTATION //
+  /////////////////
+  
+  private boolean horizontal;
+  public boolean isHorizontal() {return horizontal;}
+  public void setHorizontal() {this.horizontal = getWidth() > getHeight();}
+
+  Wall() {
+    setWidth(0);
+    setHeight(0);
+    setVisible(false);
+  }
 }

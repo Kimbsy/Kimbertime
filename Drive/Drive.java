@@ -55,7 +55,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 2;
+  int PLAYERS = 1;
 
   // create walls/collision-objects ArrayList
   List<Wall> walls = Collections.synchronizedList(new ArrayList<Wall>());
@@ -285,6 +285,31 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     l.setWidth(w * 2);
     l.setHeight(h * 2);
     levels.add(l);
+
+    // ceate border
+    Wall w1 = new Wall();
+    w1.setY(700);
+    w1.setWidth(w * 2);
+    w1.setHeight(5);
+    w1.setHorizontal();
+    w1.setVisible(true);
+    walls.add(w1);
+
+    w1 = new Wall();
+    w1.setY(50);
+    w1.setWidth(w * 2);
+    w1.setHeight(5);
+    w1.setHorizontal();
+    w1.setVisible(true);
+    walls.add(w1);
+
+    w1 = new Wall();
+    w1.setX(50);
+    w1.setWidth(5);
+    w1.setHeight(h * 2);
+    w1.setHorizontal();
+    w1.setVisible(true);
+    walls.add(w1);
   }
 
   public void initSounds() throws Exception {
@@ -317,6 +342,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
       // draw the sprites
       drawSprites();
+
+      // draw walls
+      drawWalls();
 
       // draw the scores
       drawScores();
@@ -360,6 +388,18 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       g2d.setTransform(identity);
       // draw the sprite
       s.paint(g2d);
+    }
+  }
+
+  public void drawWalls() {
+    for (int i = 0; i < walls.size(); i++) {
+      Wall w = walls.get(i);
+
+      // always set the identity
+      g2d.setTransform(identity);
+
+      // draw the walls
+      w.paint(g2d);
     }
   }
 
@@ -589,10 +629,61 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
         }
       }
 
-
       // collisions with walls
-      
+      for (int j = 0; j < walls.size(); j++) {
+        Wall w1 = walls.get(j);
+
+        if (s1.getArea().intersects(w1.getArea().getBounds())) {
+
+          // play sound
+          switch (rand.nextInt(3)) {
+            case 0:              
+              Sound.BUMP1.play();
+              break;
+            case 1:                
+              Sound.BUMP2.play();
+              break;
+            case 2:                
+              Sound.BUMP3.play();
+              break;
+          }
+
+          if (w1.isHorizontal()) {
+            // flip velY
+            s1.setVelY(-s1.getVelY());
+          }
+          else {
+            // flip velX
+            s1.setVelX(-s1.getVelX());
+          }
+
+          // angle of reflection from angle of incidence
+          s1.setFaceAngle(calcReflection(s1.getFaceAngle(), w1.isHorizontal()));
+
+          // move to stop clipping
+          s1.updatePos();
+          s1.updatePos();
+          s1.updatePos();
+        }
+      }
     }
+  }
+
+  public double calcReflection(double incident, boolean isHorizontal) {
+    // plane of reflection
+    double plane = 180;
+
+    // angle of incidence
+    incident = incident % 360;
+
+    if (!isHorizontal) {
+      plane = 90;
+    }
+
+    double diff = plane - incident;
+
+    // return angle of refraction
+    return plane + diff;
   }
 
   public void checkVictoryConditions() {
