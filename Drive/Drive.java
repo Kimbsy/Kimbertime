@@ -110,7 +110,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // start sounds
     try {
-      // initSounds();
+      initSounds();
     }
     catch (Exception e) {
       e.printStackTrace();
@@ -313,7 +313,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void initSounds() throws Exception {
-    Sound.MENU.loop();
+    // Sound.MENU.loop();
   }
 
   ///////////
@@ -635,35 +635,40 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
         if (s1.getArea().intersects(w1.getArea().getBounds())) {
 
-          // play sound
-          switch (rand.nextInt(3)) {
-            case 0:              
-              Sound.BUMP1.play();
-              break;
-            case 1:                
-              Sound.BUMP2.play();
-              break;
-            case 2:                
-              Sound.BUMP3.play();
-              break;
-          }
-
-          if (w1.isHorizontal()) {
-            // flip velY
-            s1.setVelY(-s1.getVelY());
+          if (w1.isLethal()) {
+            // @TODO 'destroy' car and respawn at last checkpoint
           }
           else {
-            // flip velX
-            s1.setVelX(-s1.getVelX());
+            // play sound
+            switch (rand.nextInt(3)) {
+              case 0:              
+                Sound.BUMP1.play();
+                break;
+              case 1:                
+                Sound.BUMP2.play();
+                break;
+              case 2:                
+                Sound.BUMP3.play();
+                break;
+            }
+
+            if (w1.isHorizontal()) {
+              // flip velY
+              s1.setVelY(-s1.getVelY());
+            }
+            else {
+              // flip velX
+              s1.setVelX(-s1.getVelX());
+            }
+
+            // angle of reflection from angle of incidence
+            s1.setFaceAngle(calcReflection(s1.getFaceAngle(), w1.isHorizontal()));
+
+            // move to stop clipping
+            s1.updatePos();
+            s1.updatePos();
+            s1.updatePos();
           }
-
-          // angle of reflection from angle of incidence
-          s1.setFaceAngle(calcReflection(s1.getFaceAngle(), w1.isHorizontal()));
-
-          // move to stop clipping
-          s1.updatePos();
-          s1.updatePos();
-          s1.updatePos();
         }
       }
     }
@@ -759,6 +764,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
         break;
       case "Play":
         setAllNotVisible();
+
+        // @TODO make music work properly
+        // Sound.MENU.stop();
+        // Sound.GAME.play();
         break;
       default:
         openPage(goTo);

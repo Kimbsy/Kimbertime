@@ -76,6 +76,11 @@ public class Wall extends BasicSprite {
   }
   public void setBounds(Shape bounds) {this.bounds = bounds;}
 
+  private boolean lethal;
+  public boolean isLethal() {return lethal;}
+  public void setLethal(boolean lethal) {this.lethal = lethal;}
+
+
   /////////////////
   // ORIENTATION //
   /////////////////
@@ -88,5 +93,6 @@ public class Wall extends BasicSprite {
     setWidth(0);
     setHeight(0);
     setVisible(false);
+    setLethal(false);
   }
 }

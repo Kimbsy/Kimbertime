@@ -40,5 +40,5 @@ public class Sound {
 
     // This one doesn't work, too big?
 
-    // public static final AudioClip GAME = Applet.newAudioClip(Sound.class.getResource("sound/music/theMetal.wav"));
+    public static final AudioClip GAME = Applet.newAudioClip(Sound.class.getResource("sound/music/theMetal.wav"));
 }

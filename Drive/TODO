@@ -7,11 +7,15 @@ Levels:
   sweepers
   demolition derby
 
-Need to make borders
+// Need to make borders
 
 Need to figure out how to do circuit
+  multiple checkpoint lines that need to be crossed in order X times?
 
 Need to make damage visible
+
+Need to make some walls lethal
+  Need to be able to respawn (at checkpoints?)
 
 Need to make music start/stop properly
 
