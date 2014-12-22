@@ -396,6 +396,7 @@ public class PlayerSprite extends BasicSprite {
     setColTime(0);
     setSlide(0);
     setSliding(false);
+    setHealth(100);
     setWreck(false);
     setScore(0);
   }

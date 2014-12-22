@@ -527,7 +527,16 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       // load the sprite
       PlayerSprite s = sprites.get(i);
 
-      s.setScore((int)(s.getFaceAngle()));
+      s.setScore(s.getHealth());
+
+      // @TODO only if level allows it?
+
+      // destroy if health is too low
+      if (s.getHealth() < 1) {
+        s.setWreck(true);
+        s.setAcc(0);
+        s.setTurn(0);
+      }
 
       // update faceAngle
       s.incFaceAngle((s.getTurn() * 5));
@@ -598,6 +607,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
               }
             }
 
+            // reduce health
+            s1.incHealth(-(int)(s2.getVel() / 2));
+            s2.incHealth(-(int)(s1.getVel() / 2));
+
             // temporary values so they can switch velocitities and directions
             double tempVel = s1.getVel();
             double tempX = s1.getVelX();
@@ -651,6 +664,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
                 Sound.BUMP3.play();
                 break;
             }
+
+            // reduce health
+            s1.incHealth(-(int)(s1.getVel() / 2));
 
             if (w1.isHorizontal()) {
               // flip velY
@@ -835,22 +851,24 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
           PlayerSprite s = sprites.get(i);
 
-          if (key == s.getUpKey()) {
-            s.setAcc(1);
-          }
-          if (key == s.getDownKey()) {
-            s.setAcc(-1);
-          }
-          if (key == s.getLeftKey()) {
-            // set turning varaible
-            s.setTurn(-1);
-          }
-          if (key == s.getRightKey()) {
-            // set turning varaible
-            s.setTurn(1);
-          }
-          if (key == s.getLightsKey()) {
-            s.toggleLights();
+          if (!s.isWreck()) {
+            if (key == s.getUpKey()) {
+              s.setAcc(1);
+            }
+            if (key == s.getDownKey()) {
+              s.setAcc(-1);
+            }
+            if (key == s.getLeftKey()) {
+              // set turning varaible
+              s.setTurn(-1);
+            }
+            if (key == s.getRightKey()) {
+              // set turning varaible
+              s.setTurn(1);
+            }
+            if (key == s.getLightsKey()) {
+              s.toggleLights();
+            }
           }
         }
       }
@@ -865,28 +883,30 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
         PlayerSprite s = sprites.get(i);
 
-        if (key == s.getUpKey()) {
-          // unset acc variable if already acc this way
-          if (s.getAcc() == 1) {
-            s.setAcc(0);
+        if (!s.isWreck()) {
+          if (key == s.getUpKey()) {
+            // unset acc variable if already acc this way
+            if (s.getAcc() == 1) {
+              s.setAcc(0);
+            }
           }
-        }
-        if (key == s.getDownKey()) {
-          // unset acc variable if already acc this way
-          if (s.getAcc() == -1) {
-            s.setAcc(0);
+          if (key == s.getDownKey()) {
+            // unset acc variable if already acc this way
+            if (s.getAcc() == -1) {
+              s.setAcc(0);
+            }
           }
-        }
-        if (key == s.getLeftKey()) {
-          // unset turning variable if already turning this way
-          if (s.getTurn() == -1) {
-            s.setTurn(0);
+          if (key == s.getLeftKey()) {
+            // unset turning variable if already turning this way
+            if (s.getTurn() == -1) {
+              s.setTurn(0);
+            }
           }
-        }
-        if (key == s.getRightKey()) {
-          // unset turning variable if already turning this way
-          if (s.getTurn() == 1) {
-            s.setTurn(0);
+          if (key == s.getRightKey()) {
+            // unset turning variable if already turning this way
+            if (s.getTurn() == 1) {
+              s.setTurn(0);
+            }
           }
         }
       }
