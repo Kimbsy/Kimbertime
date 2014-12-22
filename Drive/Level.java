@@ -47,6 +47,18 @@ public class Level extends BasicSprite {
   public void setHeight(int height) {this.height = height;}
   public void setImage(BufferedImage image) {this.image = image;}
 
+  ///////////////////////
+  // GAMEPLAY BOOLEANS //
+  ///////////////////////
+
+  public boolean damage;
+  public boolean damageIsOn() {return damage;}
+  public void setDamage(boolean damage) {this.damage = damage;}
+
+  public boolean cameraMove;
+  public boolean cameraShouldMove() {return cameraMove;}
+  public void setCameraMave(boolean cameraMove) {this.cameraMove = cameraMove;}
+
   ///////////////////
   // LEVEL METHODS //
   ///////////////////
@@ -63,5 +75,7 @@ public class Level extends BasicSprite {
   Level() {
     setWidth(0);
     setHeight(0);
+    setDamage(false);
+    setCameraMave(false);
   }
 }

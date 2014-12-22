@@ -170,7 +170,14 @@ public class PlayerSprite extends BasicSprite {
   private int health;
   public int getHealth() {return health;}
   public void setHealth(int health) {this.health = health;}
-  public void incHealth(int i) {this.health += i;}
+  public void incHealth(int i) {
+    if (this.health + i < 1) {
+      this.health = 0;
+    }
+    else {
+      this.health += i;
+    }
+  }
 
   private boolean wreck;
   public boolean isWreck() {return wreck;}

@@ -92,6 +92,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // default constructor
   public Drive() {
     super("Drive");
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
     setSize(w, (h)); // 32 is for JFrame top bar
     setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -283,6 +284,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void initLevels() {
+
+    // only init one level, mutate as neccessary
+
+
     // @TODO temporary grid need multiple levels
     Level l = new Level();
     l.setWidth(w * 2);
@@ -337,8 +342,16 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     checkStarted();
 
     if (started) {
+      // only ever one level
+      Level l = levels.get(0);
+
       // draw the backBuffer to the window
-      g.drawImage(backBuffer, (w / 2) - (int)getAverageX(), (h / 2) - (int)getAverageY(), this);
+      if (l.cameraShouldMove()) {
+        g.drawImage(backBuffer, (w / 2) - (int)getAverageX(), (h / 2) - (int)getAverageY(), this);
+      }
+      else {
+        g.drawImage(backBuffer, 0, 0, this);
+      }
 
       // start all transforms at the identity
       try {
@@ -440,14 +453,18 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       }
       catch (NullPointerException e) { }
 
+      // only one level
+      Level l = levels.get(0);
+
       // want to stay with camera
-      g2d.translate((int)getAverageX() - (w / 2), (int)getAverageY() - (h / 2));
+      if (l.cameraShouldMove()) {
+        g2d.translate((int)getAverageX() - (w / 2), (int)getAverageY() - (h / 2));
+      }
 
       // set corresponing color
       g2d.setColor(s.getColor());
       // draw the scores
       g2d.drawString(Integer.toString(s.getScore()), (i * 50) + 10, 50);
-
     } 
   }
 
@@ -563,8 +580,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
       s.setScore(s.getHealth());
 
-      // @TODO only if level allows it?
-
       // destroy if health is too low
       if (s.getHealth() < 1) {
         s.setWreck(true);
@@ -641,9 +656,13 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
               }
             }
 
-            // reduce health
-            s1.incHealth(-(int)(s2.getVel() / 2));
-            s2.incHealth(-(int)(s1.getVel() / 2));
+            Level l = levels.get(0);
+
+            if (l.damageIsOn()) {
+              // reduce health
+              s1.incHealth(-(int)(s2.getVel() / 2));
+              s2.incHealth(-(int)(s1.getVel() / 2));
+            }
 
             // temporary values so they can switch velocitities and directions
             double tempVel = s1.getVel();
