@@ -167,7 +167,6 @@ public class PlayerSprite extends BasicSprite {
   public void setSliding(boolean sliding) {this.sliding = sliding;}
   public void toggleSliding() {this.sliding = !isSliding();}
 
-  // @TODO implement damage from collisions
   private int health;
   public int getHealth() {return health;}
   public void setHealth(int health) {this.health = health;}

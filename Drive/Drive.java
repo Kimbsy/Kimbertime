@@ -26,6 +26,9 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.io.File;
 
 public class Drive extends JFrame implements Runnable, MouseListener, KeyListener {
 
@@ -61,7 +64,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   List<Wall> walls = Collections.synchronizedList(new ArrayList<Wall>());
 
   // create identity transform
-  AffineTransform identity = new AffineTransform();
+  public AffineTransform identity = new AffineTransform();
 
   // create random number generator
   Random rand = new Random();
@@ -284,6 +287,13 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     Level l = new Level();
     l.setWidth(w * 2);
     l.setHeight(h * 2);
+    try {
+      l.setImage(ImageIO.read(new File("img/Wooden_floor.jpg")));
+    }
+    catch (IOException e) {
+      System.out.println("shit");
+      e.printStackTrace();
+    }
     levels.add(l);
 
     // ceate border
@@ -331,7 +341,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       g.drawImage(backBuffer, (w / 2) - (int)getAverageX(), (h / 2) - (int)getAverageY(), this);
 
       // start all transforms at the identity
-      g2d.setTransform(identity);
+      try {
+        g2d.setTransform(identity);
+      }
+      catch (NullPointerException e) { }
 
       // erase the background
       g2d.setColor(Color.GRAY);
@@ -362,7 +375,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     Level l = levels.get(levelID);
 
     // translate background
-    g2d.setTransform(identity);
+    try {
+      g2d.setTransform(identity);
+    }
+    catch (NullPointerException e) { }
 
     // draw the level
     l.paint(g2d);
@@ -375,7 +391,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       PlayerSprite s = sprites.get(i);
 
       // always draw from identity transform
-      g2d.setTransform(identity);
+      try {
+        g2d.setTransform(identity);
+      }
+      catch (NullPointerException e) { }
       // draw lights
       s.drawLights(g2d);
     }
@@ -385,7 +404,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       PlayerSprite s = sprites.get(i);
 
       // always draw from identity transform
-      g2d.setTransform(identity);
+      try {
+        g2d.setTransform(identity);
+      }
+      catch (NullPointerException e) { }
       // draw the sprite
       s.paint(g2d);
     }
@@ -396,7 +418,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       Wall w = walls.get(i);
 
       // always set the identity
-      g2d.setTransform(identity);
+      try {
+        g2d.setTransform(identity);
+      }
+      catch (NullPointerException e) { }
 
       // draw the walls
       w.paint(g2d);
@@ -410,7 +435,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       PlayerSprite s = sprites.get(i);
 
       // always the identity
-      g2d.setTransform(identity);
+      try {
+        g2d.setTransform(identity);
+      }
+      catch (NullPointerException e) { }
 
       // want to stay with camera
       g2d.translate((int)getAverageX() - (w / 2), (int)getAverageY() - (h / 2));
@@ -430,10 +458,16 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       // load the page
       Page p = pages.get(i);
 
-      g2d.setTransform(identity);
+      try {
+        g2d.setTransform(identity);
+      }
+      catch (NullPointerException e) { }
       // check if page is being shown
       if (p.getVisible()) {
-        p.paint(g2d, identity);
+        try {
+          p.paint(g2d);
+        }
+        catch (NullPointerException e) { }
       }
     }
   }

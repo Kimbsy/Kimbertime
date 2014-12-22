@@ -73,7 +73,10 @@ public class Page extends BasicSprite {
   // PAGE METHODS //
   //////////////////
   
-  public void paint(Graphics2D g2d, AffineTransform identity) {
+  public void paint(Graphics2D g2d) {
+
+    AffineTransform identity = new AffineTransform();
+
     // draw the page
     g2d.setColor(Color.BLACK);
     g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -85,7 +88,10 @@ public class Page extends BasicSprite {
     g2d.drawString(getTitle(), 0, 0);
 
     // reset the transform
-    g2d.setTransform(identity);
+    try {
+      g2d.setTransform(identity);
+    }
+    catch (NullPointerException e) { }
 
     // write content
     if (hasContent()) {
@@ -96,7 +102,10 @@ public class Page extends BasicSprite {
         g2d.drawString(cont[i], 0, 0);
         g2d.translate(0, 30);
       }
-      g2d.setTransform(identity);
+      try {
+        g2d.setTransform(identity);
+      }
+      catch (NullPointerException e) { }
       g2d.setFont(getFont());
     }
 

@@ -19,6 +19,7 @@
  */
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Level extends BasicSprite {
 
@@ -28,6 +29,7 @@ public class Level extends BasicSprite {
   
   int width;
   int height;
+  BufferedImage image;
 
   ////////////////////////////
   // BASIC ACCESSOR METHODS //
@@ -35,6 +37,7 @@ public class Level extends BasicSprite {
   
   public int getWidth() {return width;}
   public int getHeight() {return height;}
+  public BufferedImage getImage() {return image;}
 
   ///////////////////////////
   // BASIC MUTATOR METHODS //
@@ -42,25 +45,15 @@ public class Level extends BasicSprite {
 
   public void setWidth(int width) {this.width = width;}
   public void setHeight(int height) {this.height = height;}
+  public void setImage(BufferedImage image) {this.image = image;}
 
   ///////////////////
   // LEVEL METHODS //
   ///////////////////
 
   public void paint(Graphics2D g2d) {
-
-    // @TODO grid is temporary
-
-    g2d.setColor(Color.BLUE);
-    
-    int numSqX = getWidth() / 30;
-    int numSqY = getHeight() / 30;
-
-    for (int i = 0; i < numSqX; i++) {
-      for (int j = 0; j < numSqY; j++) {
-        g2d.drawRect(((i + 1) * 30), ((j + 1) * 30), 30, 30);
-      }
-    }
+    // draw level image
+    g2d.drawImage(getImage(), 0, 0, null);
   }
 
   /////////////////////////
