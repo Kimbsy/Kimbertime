@@ -35,12 +35,12 @@ public class Sound {
   }
 
   public void play() {
+    rewind();
     AudioPlayer.player.start(audioStream);
   }
 
   public void stop() {
     AudioPlayer.player.stop(audioStream);
-    rewind();
   }
 
   public void rewind() {

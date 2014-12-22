@@ -57,7 +57,7 @@ public class Level extends BasicSprite {
 
   public boolean cameraMove;
   public boolean cameraShouldMove() {return cameraMove;}
-  public void setCameraMave(boolean cameraMove) {this.cameraMove = cameraMove;}
+  public void setCameraMove(boolean cameraMove) {this.cameraMove = cameraMove;}
 
   ///////////////////
   // LEVEL METHODS //
@@ -76,6 +76,6 @@ public class Level extends BasicSprite {
     setWidth(0);
     setHeight(0);
     setDamage(false);
-    setCameraMave(false);
+    setCameraMove(true);
   }
 }

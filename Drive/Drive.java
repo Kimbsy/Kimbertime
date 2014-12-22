@@ -60,7 +60,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 1;
+  int PLAYERS = 2;
 
   // create walls/collision-objects ArrayList
   List<Wall> walls = Collections.synchronizedList(new ArrayList<Wall>());
@@ -323,7 +323,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // ceate border
     Wall w1 = new Wall();
-    w1.setY(700);
+    w1.setY((h * 2) - 50);
     w1.setWidth(w * 2);
     w1.setHeight(5);
     w1.setHorizontal();
@@ -340,6 +340,14 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     w1 = new Wall();
     w1.setX(50);
+    w1.setWidth(5);
+    w1.setHeight(h * 2);
+    w1.setHorizontal();
+    w1.setVisible(true);
+    walls.add(w1);
+
+    w1 = new Wall();
+    w1.setX((w * 2) - 50);
     w1.setWidth(5);
     w1.setHeight(h * 2);
     w1.setHorizontal();
@@ -656,6 +664,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     for (int i = 0; i < sprites.size(); i++) {
       PlayerSprite s1 = sprites.get(i);
 
+      // only one level
+      Level l = levels.get(0);
+
       // collisions with other sprites
       for (int j = 0; j < sprites.size(); j++) {
         PlayerSprite s2 = sprites.get(j);
@@ -693,8 +704,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
                 s2.incY(-1);
               }
             }
-
-            Level l = levels.get(0);
 
             if (l.damageIsOn()) {
               // reduce health
@@ -757,7 +766,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             }
 
             // reduce health
-            s1.incHealth(-(int)(s1.getVel() / 2));
+            if (l.damageIsOn()) {
+              s1.incHealth(-(int)(s1.getVel() / 2));
+            }
 
             if (w1.isHorizontal()) {
               // flip velY
@@ -861,8 +872,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       default:
         break;
     }
-
-    System.out.println(goTo);
 
     switch (goTo) {
       case "":
