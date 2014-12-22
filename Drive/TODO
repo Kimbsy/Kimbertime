@@ -1,6 +1,6 @@
 TODO
 
-Levels:
+Levels (init one level, then mutate to fit:
   drag race
   circuit race
   sumo
@@ -21,7 +21,7 @@ Need to make damage visible
 Need to make some walls lethal
   Need to be able to respawn (at checkpoints?)
 
-Need to make music start/stop properly
+// Need to make music start/stop properly
 
 // Need collisions to work properly
   // cars need to turn the right way

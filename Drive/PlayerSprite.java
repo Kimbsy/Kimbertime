@@ -253,7 +253,7 @@ public class PlayerSprite extends BasicSprite {
     }
   }
 
-  public void updateVel() {
+  public void updateVel(Sound tyres1, Sound tyres2, Sound tyres3) {
     if (!isSliding()) {
       switch(acc) {
         // if neither held tend towards 0
@@ -281,13 +281,13 @@ public class PlayerSprite extends BasicSprite {
               if (getScreechTime() < 0) {
                 switch (rand.nextInt(3)) {
                   case 0:
-                    Sound.SCREECH1.play();
+                    tyres1.play();
                     break;
                   case 1:
-                    Sound.SCREECH2.play();
+                    tyres2.play();
                     break;
                   case 2:
-                    Sound.SCREECH3.play();
+                    tyres3.play();
                     break;
                 }
                 setScreechTime(100);

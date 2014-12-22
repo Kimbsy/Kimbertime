@@ -29,6 +29,8 @@ import javax.swing.*;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.*;
+import sun.audio.*;
 
 public class Drive extends JFrame implements Runnable, MouseListener, KeyListener {
 
@@ -83,6 +85,24 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // boolean toggles
   boolean started = false;
+
+  // sounds
+  Sound menuMusic;
+  Sound gameMusic;
+
+  Sound collision1;
+  Sound collision2;
+  Sound collision3;
+  
+  Sound tyres1;
+  Sound tyres2;
+  Sound tyres3;
+  
+  Sound engine1;
+  Sound engine2;
+  Sound engine3;
+
+  Sound horn1;
 
   // main
   public static void main(String[] args) {
@@ -328,7 +348,25 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void initSounds() throws Exception {
-    // Sound.MENU.loop();
+
+    menuMusic = new Sound("sound/music/elevatorMusic.wav");
+    gameMusic = new Sound("sound/music/theMetal.wav");
+
+    collision1 = new Sound("sound/collision/collision1.wav");
+    collision2 = new Sound("sound/collision/collision2.wav");
+    collision3 = new Sound("sound/collision/collision3.wav");
+
+    tyres1 = new Sound("sound/tyres/tyres1.wav");
+    tyres2 = new Sound("sound/tyres/tyres2.wav");
+    tyres3 = new Sound("sound/tyres/tyres3.wav");
+
+    engine1 = new Sound("sound/engine/engine1.wav");
+    engine2 = new Sound("sound/engine/engine2.wav");
+    engine3 = new Sound("sound/engine/engine3.wav");
+
+    horn1 = new Sound("sound/horn/horn1.wav");
+
+    menuMusic.play();
   }
 
   ///////////
@@ -591,7 +629,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       s.incFaceAngle((s.getTurn() * 5));
 
       // update velocity
-      s.updateVel();
+      s.updateVel(tyres1, tyres2, tyres3);
 
       // update position
       s.updatePos();
@@ -627,13 +665,13 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             // play sound
             switch (rand.nextInt(3)) {
               case 0:              
-                Sound.BUMP1.play();
+                collision1.play();
                 break;
               case 1:                
-                Sound.BUMP2.play();
+                collision2.play();
                 break;
               case 2:                
-                Sound.BUMP3.play();
+                collision3.play();
                 break;
             }
 
@@ -708,13 +746,13 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             // play sound
             switch (rand.nextInt(3)) {
               case 0:              
-                Sound.BUMP1.play();
+                collision1.play();
                 break;
               case 1:                
-                Sound.BUMP2.play();
+                collision2.play();
                 break;
               case 2:                
-                Sound.BUMP3.play();
+                collision3.play();
                 break;
             }
 
@@ -824,6 +862,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
         break;
     }
 
+    System.out.println(goTo);
+
     switch (goTo) {
       case "":
         // do nothing
@@ -831,12 +871,14 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       case "NO":
         // do nothing
         break;
-      case "Play":
+      case "play":
+        // get rid of menu
         setAllNotVisible();
 
-        // @TODO make music work properly
-        // Sound.MENU.stop();
-        // Sound.GAME.play();
+        // switch tracks
+        menuMusic.stop();
+        gameMusic.play();
+
         break;
       default:
         openPage(goTo);
@@ -895,6 +937,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
           // if pause (such a bad way of doing it, must learn hash maps)
           if (p.getName() == "pause") {
             p.setVisible(true);
+
+            // switch tracks
+            gameMusic.stop();
+            menuMusic.play();
           }
         }
       }
