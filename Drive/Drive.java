@@ -836,14 +836,14 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             }
 
             // temporary values so they can switch velocitities and directions
-            double tempVel = s1.getVel();
-            double tempX = s1.getVelX();
-            double tempY = s1.getVelY();
+            double tempVel = (s1.getVel() * 0.9);
+            double tempX = (s1.getVelX() * 0.9);
+            double tempY = (s1.getVelY() * 0.9);
 
             // set s1 to have s2's values
-            s1.setVel(Math.abs(s2.getVel()));
-            s1.setVelX(s2.getVelX());
-            s1.setVelY(s2.getVelY());
+            s1.setVel(Math.abs((s2.getVel() * 0.9)));
+            s1.setVelX((s2.getVelX() * 0.9));
+            s1.setVelY((s2.getVelY() * 0.9));
 
             // set s2 to have s1's values
             s2.setVel(Math.abs(tempVel));
@@ -896,12 +896,12 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             }
 
             if (w1.isHorizontal()) {
-              // flip velY
-              s1.setVelY(-s1.getVelY());
+              // flip velY (reduce for friction)
+              s1.setVelY(-(s1.getVelY() * 0.9));
             }
             else {
-              // flip velX
-              s1.setVelX(-s1.getVelX());
+              // flip velX (reduce for friction)
+              s1.setVelX(-(s1.getVelX() * 0.9));
             }
 
             // angle of reflection from angle of incidence

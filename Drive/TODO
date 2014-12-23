@@ -7,6 +7,8 @@ Levels (init one level, then mutate to fit:
   sweepers
   demolition derby
 
+Need to slow down bounces from collisions
+
 // Need to make stuff dependant on levels, damage, camera move etc
 
 // Need to figure out how to use photo as background
@@ -18,8 +20,8 @@ Need to figure out how to do circuit
 
 Need to make damage visible
 
-Need to make some walls lethal
-  Need to be able to respawn (at checkpoints?)
+// Need to make some walls lethal
+//   Need to be able to respawn (at checkpoints?)
 
 // Need to make music start/stop properly
 
