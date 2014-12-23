@@ -438,12 +438,24 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void initCheckpoints() {
     Checkpoint c = new Checkpoint();
+    c.setDelta(0);
     c.setX(400);
     c.setY(50);
     c.setWidth(5);
-    c.setHeight(200);
+    c.setHeight(300);
     c.setVisible(true);
     c.setDirection("RIGHT");
+    c.setSpawns();
+    checkpoints.add(c);
+
+    c = new Checkpoint();
+    c.setDelta(1);
+    c.setX(50);
+    c.setY(700);
+    c.setWidth(300);
+    c.setHeight(5);
+    c.setVisible(true);
+    c.setDirection("UP");
     c.setSpawns();
     checkpoints.add(c);
   }
@@ -905,7 +917,17 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
       // collisions with checkpoints
       for (int j = 0; j < checkpoints.size(); j++) {
-        // @TODO increment player's lastestCheck if ppropriate (in order)
+        // increment player's lastestCheck if appropriate (passed in order)
+        Checkpoint c = checkpoints.get(j);
+
+        // if they collide
+        if (s1.getArea().intersects(c.getArea().getBounds())) {
+
+          // if it is the next one
+          if ((s1.getLatestCheck() + 1 == (c.getDelta())) || (c.getDelta() == 0 && s1.getLatestCheck() == (checkpoints.size() - 1))) {
+            s1.setLatestCheck(c.getDelta());
+          }
+        }
       }
     }
   }
