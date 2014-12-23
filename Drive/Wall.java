@@ -45,13 +45,17 @@ public class Wall extends BasicSprite {
   public boolean isVisible() {return visible;}
   public void setVisible(boolean visible) {this.visible = visible;}
 
+  private Color color;
+  public Color getColor() {return color;}
+  public void setColor(Color color) {this.color = color;}
+
   public void paint(Graphics2D g2d) {
     if (isVisible()) {
       // move to position
       g2d.translate(getX(), getY());
 
       // draw wall
-      g2d.setColor(Color.RED);
+      g2d.setColor(getColor());
       g2d.drawRect(0, 0, getWidth(), getHeight());
 
       // move back
@@ -89,10 +93,15 @@ public class Wall extends BasicSprite {
   public boolean isHorizontal() {return horizontal;}
   public void setHorizontal() {this.horizontal = getWidth() > getHeight();}
 
+  /////////////////////////
+  // DEFAULT CONSTRUCTOR //
+  /////////////////////////
+
   Wall() {
     setWidth(0);
     setHeight(0);
     setVisible(false);
+    setColor(Color.RED);
     setLethal(false);
   }
 }

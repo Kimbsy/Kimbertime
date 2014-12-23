@@ -60,10 +60,13 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 2;
+  int PLAYERS = 1;
 
   // create walls/collision-objects ArrayList
   List<Wall> walls = Collections.synchronizedList(new ArrayList<Wall>());
+
+  // create checkpoints ArrayList
+  List<Checkpoint> checkpoints = Collections.synchronizedList(new ArrayList<Checkpoint>());
 
   // create identity transform
   public AffineTransform identity = new AffineTransform();
@@ -131,6 +134,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // create levels
     initLevels();
+
+    // create checkpoints
+    initCheckpoints();
 
     // start sounds
     try {
@@ -254,8 +260,12 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   public void initSprites() {
     for (int i = 0; i < PLAYERS; i++) {
       PlayerSprite s = new PlayerSprite();
-      s.setX((w / 2) + (100 * i));
-      s.setY((h / 2) + (100));
+
+      s.setX(/*(w / 2) + */(200));
+      s.setY(/*(h / 2) + */(175 + (i * 50)));
+      
+      // set sprite position
+      // respawn(s);
 
       // set up controls
       if (i < 4) {
@@ -264,6 +274,38 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
       sprites.add(s);
     }
+  }
+
+  public void respawn(PlayerSprite s) {
+    // find lastest checkpoint spawn ani increment
+    Checkpoint c = checkpoints.get(s.getLatestCheck());
+    int spawn = c.getMostRecentSpawn();
+    c.incMostRecentSpawn(1);
+
+    // zero all velocity
+    s.setVel(0);
+    s.setVelX(0);
+    s.setVelY(0);
+
+    // reset faceAngle based on checkpoint orientation
+    switch (c.getDirection()) {
+      case "UP":
+        s.setFaceAngle(270);
+        break;
+      case "DOWN":
+        s.setFaceAngle(90);
+        break;
+      case "LEFT":
+        s.setFaceAngle(180);
+        break;
+      case "RIGHT":
+        s.setFaceAngle(0);
+        break;
+    }
+
+    // reposition
+    s.setX(c.getSpawnXs()[spawn]);
+    s.setY(c.getSpawnYs()[spawn]);
   }
 
   public void setStandardControls(PlayerSprite s, int i) {
@@ -321,38 +363,89 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     }
     levels.add(l);
 
-    // ceate border
+    // ceate outside border
     Wall w1 = new Wall();
     w1.setY((h * 2) - 50);
     w1.setWidth(w * 2);
     w1.setHeight(5);
     w1.setHorizontal();
     w1.setVisible(true);
+    w1.setColor(Color.GREEN);
+    w1.setLethal(true);
     walls.add(w1);
 
-    w1 = new Wall();
-    w1.setY(50);
-    w1.setWidth(w * 2);
-    w1.setHeight(5);
-    w1.setHorizontal();
-    w1.setVisible(true);
-    walls.add(w1);
+    Wall w2 = new Wall();
+    w2.setY(50);
+    w2.setWidth(w * 2);
+    w2.setHeight(5);
+    w2.setHorizontal();
+    w2.setVisible(true);
+    walls.add(w2);
 
-    w1 = new Wall();
-    w1.setX(50);
-    w1.setWidth(5);
-    w1.setHeight(h * 2);
-    w1.setHorizontal();
-    w1.setVisible(true);
-    walls.add(w1);
+    Wall w3 = new Wall();
+    w3.setX(50);
+    w3.setWidth(5);
+    w3.setHeight(h * 2);
+    w3.setHorizontal();
+    w3.setVisible(true);
+    walls.add(w3);
 
-    w1 = new Wall();
-    w1.setX((w * 2) - 50);
-    w1.setWidth(5);
-    w1.setHeight(h * 2);
-    w1.setHorizontal();
-    w1.setVisible(true);
-    walls.add(w1);
+    Wall w4 = new Wall();
+    w4.setX((w * 2) - 50);
+    w4.setWidth(5);
+    w4.setHeight(h * 2);
+    w4.setHorizontal();
+    w4.setVisible(true);
+    walls.add(w4);
+
+    // create inside border
+    Wall w5 = new Wall();
+    w5.setY((h * 2) - 300);
+    w5.setX(300);
+    w5.setWidth((w * 2) - 600);
+    w5.setHeight(5);
+    w5.setHorizontal();
+    w5.setVisible(true);
+    walls.add(w5);
+
+    Wall w6 = new Wall();
+    w6.setX(300);
+    w6.setY(300);
+    w6.setWidth((w * 2) - 600);
+    w6.setHeight(5);
+    w6.setHorizontal();
+    w6.setVisible(true);
+    walls.add(w6);
+
+    Wall w7 = new Wall();
+    w7.setX(300);
+    w7.setY(300);
+    w7.setWidth(5);
+    w7.setHeight((h * 2) - 600);
+    w7.setHorizontal();
+    w7.setVisible(true);
+    walls.add(w7);
+
+    Wall w8 = new Wall();
+    w8.setX((w * 2) - 300);
+    w8.setY(300);
+    w8.setWidth(5);
+    w8.setHeight((h * 2) - 600);
+    w8.setHorizontal();
+    w8.setVisible(true);
+    walls.add(w8);
+  }
+
+  public void initCheckpoints() {
+    Checkpoint c = new Checkpoint();
+    c.setX(400);
+    c.setY(50);
+    c.setWidth(5);
+    c.setHeight(200);
+    c.setVisible(true);
+    c.setDirection("RIGHT");
+    c.setSpawns();
+    checkpoints.add(c);
   }
 
   public void initSounds() throws Exception {
@@ -418,6 +511,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       // draw walls
       drawWalls();
 
+      // draw checkpoints
+      drawCheckpoints();
+
       // draw the scores
       drawScores();
     }
@@ -467,6 +563,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
         g2d.setTransform(identity);
       }
       catch (NullPointerException e) { }
+
       // draw the sprite
       s.paint(g2d);
     }
@@ -474,16 +571,31 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void drawWalls() {
     for (int i = 0; i < walls.size(); i++) {
-      Wall w = walls.get(i);
+      Wall w1 = walls.get(i);
 
-      // always set the identity
+      // always set to the identity
       try {
         g2d.setTransform(identity);
       }
       catch (NullPointerException e) { }
 
       // draw the walls
-      w.paint(g2d);
+      w1.paint(g2d);
+    }
+  }
+
+  public void drawCheckpoints() {
+    for (int i = 0; i < checkpoints.size(); i++) {
+      Checkpoint c = checkpoints.get(i);
+
+      // always set to the identity
+      try {
+        g2d.setTransform(identity);
+      }
+      catch (NullPointerException e) { }
+
+      // draw the checkpoint
+      c.paint(g2d);
     }
   }
 
@@ -749,7 +861,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
         if (s1.getArea().intersects(w1.getArea().getBounds())) {
 
           if (w1.isLethal()) {
-            // @TODO 'destroy' car and respawn at last checkpoint
+            // respawn at last checkpoint
+            respawn(s1);
           }
           else {
             // play sound
@@ -788,6 +901,11 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
             s1.updatePos();
           }
         }
+      }
+
+      // collisions with checkpoints
+      for (int j = 0; j < checkpoints.size(); j++) {
+        // @TODO increment player's lastestCheck if ppropriate (in order)
       }
     }
   }

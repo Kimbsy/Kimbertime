@@ -196,7 +196,10 @@ public class PlayerSprite extends BasicSprite {
   // CHECKPOINTS //
   /////////////////
   
-  // @TODO do checkpoints
+  // delta of most recently passed checkpoint
+  private int lastestCheck;
+  public int getLatestCheck() {return lastestCheck;}
+  public void setLatestCheck(int lastestCheck) {this.lastestCheck = lastestCheck;}
 
   //////////////////////////
   // PLAYERSPRITE METHODS //
@@ -405,5 +408,6 @@ public class PlayerSprite extends BasicSprite {
     setHealth(100);
     setWreck(false);
     setScore(0);
+    setLatestCheck(0);
   }
 }

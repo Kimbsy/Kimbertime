@@ -14,6 +14,10 @@
 * limitations under the License.
 ***************************************************************************/
 
+/**
+ * Cobbled together crappy sound class. Not laggy, but can't loop :/
+ */
+
 import java.io.*;
 import sun.audio.*;
 
