@@ -48,8 +48,11 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   Graphics2D g2d;
 
   // frame dimensions
-  int w = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;
-  int h = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
+  // int w = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;
+  // int h = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height;
+
+  int w = 1500;
+  int h = 1000;
 
   // create page ArrayList
   List<Page> pages = Collections.synchronizedList(new ArrayList<Page>());
@@ -63,7 +66,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   int PLAYERS = 1;
 
   // create walls/collision-objects ArrayList
-  List<Wall> walls = Collections.synchronizedList(new ArrayList<Wall>());
+  List<Wall> lapWalls = Collections.synchronizedList(new ArrayList<Wall>());
+  List<Wall> demoWalls = Collections.synchronizedList(new ArrayList<Wall>());
 
   // create checkpoints ArrayList
   List<Checkpoint> checkpoints = Collections.synchronizedList(new ArrayList<Checkpoint>());
@@ -277,8 +281,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       PlayerSprite s = new PlayerSprite();
 
       // set sprite position
-      s.setX((200));
-      s.setY((175 + (i * 50)));
+      s.setX((490));
+      s.setY((525 + (i * 50)));
       
       // set up controls
       if (i < 4) {
@@ -370,7 +374,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // background image
     try {
-      l.setImage(ImageIO.read(new File("img/Wooden_floor.jpg")));
+      l.setImage(ImageIO.read(new File("img/presentTrack.jpg")));
     }
     catch (IOException e) {
       System.out.println("shit image");
@@ -382,99 +386,263 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     // ceate outside border
     Wall w1 = new Wall();
-    w1.setY((h * 2) - 50);
-    w1.setWidth(w * 2);
+    w1.setX(345);
+    w1.setY(375);
+    w1.setWidth(1100);
     w1.setHeight(5);
     w1.setHorizontal();
     w1.setVisible(true);
-    // w1.setColor(Color.GREEN);
-    // w1.setLethal(true);
-    walls.add(w1);
+    lapWalls.add(w1);
 
     Wall w2 = new Wall();
-    w2.setY(50);
-    w2.setWidth(w * 2);
-    w2.setHeight(5);
+    w2.setX(1440);
+    w2.setY(285);
+    w2.setWidth(5);
+    w2.setHeight(95);
     w2.setHorizontal();
     w2.setVisible(true);
-    walls.add(w2);
+    lapWalls.add(w2);
 
     Wall w3 = new Wall();
-    w3.setX(50);
-    w3.setWidth(5);
-    w3.setHeight(h * 2);
+    w3.setX(1440);
+    w3.setY(285);
+    w3.setWidth(260);
+    w3.setHeight(5);
     w3.setHorizontal();
     w3.setVisible(true);
-    walls.add(w3);
+    lapWalls.add(w3);
 
     Wall w4 = new Wall();
-    w4.setX((w * 2) - 50);
+    w4.setX(1695);
+    w4.setY(285);
     w4.setWidth(5);
-    w4.setHeight(h * 2);
+    w4.setHeight(80);
     w4.setHorizontal();
     w4.setVisible(true);
-    walls.add(w4);
+    lapWalls.add(w4);
 
-    // create inside border
     Wall w5 = new Wall();
-    w5.setY((h * 2) - 300);
-    w5.setX(300);
-    w5.setWidth((w * 2) - 600);
+    w5.setX(1695);
+    w5.setY(360);
+    w5.setWidth(605);
     w5.setHeight(5);
     w5.setHorizontal();
     w5.setVisible(true);
-    walls.add(w5);
+    lapWalls.add(w5);
 
     Wall w6 = new Wall();
-    w6.setX(300);
-    w6.setY(300);
-    w6.setWidth((w * 2) - 600);
-    w6.setHeight(5);
+    w6.setX(2295);
+    w6.setY(360);
+    w6.setWidth(5);
+    w6.setHeight(320);
     w6.setHorizontal();
     w6.setVisible(true);
-    walls.add(w6);
+    lapWalls.add(w6);
 
     Wall w7 = new Wall();
-    w7.setX(300);
-    w7.setY(300);
-    w7.setWidth(5);
-    w7.setHeight((h * 2) - 600);
+    w7.setX(2295);
+    w7.setY(675);
+    w7.setWidth(150);
+    w7.setHeight(5);
     w7.setHorizontal();
     w7.setVisible(true);
-    walls.add(w7);
+    lapWalls.add(w7);
 
     Wall w8 = new Wall();
-    w8.setX((w * 2) - 300);
-    w8.setY(300);
+    w8.setX(2440);
+    w8.setY(675);
     w8.setWidth(5);
-    w8.setHeight((h * 2) - 600);
+    w8.setHeight(710);
     w8.setHorizontal();
     w8.setVisible(true);
-    walls.add(w8);
+    lapWalls.add(w8);
+
+    
+    Wall w9 = new Wall();
+    w9.setX(2345);
+    w9.setY(1380);
+    w9.setWidth(100);
+    w9.setHeight(5);
+    w9.setHorizontal();
+    w9.setVisible(true);
+    lapWalls.add(w9);
+
+    Wall w10 = new Wall();
+    w10.setX(2345);
+    w10.setY(1380);
+    w10.setWidth(5);
+    w10.setHeight(270);
+    w10.setHorizontal();
+    w10.setVisible(true);
+    lapWalls.add(w10);
+
+    Wall w11 = new Wall();
+    w11.setX(440);
+    w11.setY(1645);
+    w11.setWidth(1905);
+    w11.setHeight(5);
+    w11.setHorizontal();
+    w11.setVisible(true);
+    lapWalls.add(w11);
+
+    Wall w12 = new Wall();
+    w12.setX(440);
+    w12.setY(1530);
+    w12.setWidth(5);
+    w12.setHeight(120);
+    w12.setHorizontal();
+    w12.setVisible(true);
+    lapWalls.add(w12);
+
+    Wall w13 = new Wall();
+    w13.setX(235);
+    w13.setY(1530);
+    w13.setWidth(210);
+    w13.setHeight(5);
+    w13.setHorizontal();
+    w13.setVisible(true);
+    lapWalls.add(w13);
+
+    Wall w14 = new Wall();
+    w14.setX(235);
+    w14.setY(1245);
+    w14.setWidth(5);
+    w14.setHeight(290);
+    w14.setHorizontal();
+    w14.setVisible(true);
+    lapWalls.add(w14);
+
+    Wall w15 = new Wall();
+    w15.setX(235);
+    w15.setY(1245);
+    w15.setWidth(70);
+    w15.setHeight(5);
+    w15.setHorizontal();
+    w15.setVisible(true);
+    lapWalls.add(w15);
+
+    Wall w16 = new Wall();
+    w16.setX(300);
+    w16.setY(700);
+    w16.setWidth(5);
+    w16.setHeight(545);
+    w16.setHorizontal();
+    w16.setVisible(true);
+    lapWalls.add(w16);
+
+    Wall w17 = new Wall();
+    w17.setX(300);
+    w17.setY(700);
+    w17.setWidth(50);
+    w17.setHeight(5);
+    w17.setHorizontal();
+    w17.setVisible(true);
+    lapWalls.add(w17);
+
+    Wall w18 = new Wall();
+    w18.setX(345);
+    w18.setY(375);
+    w18.setWidth(5);
+    w18.setHeight(330);
+    w18.setHorizontal();
+    w18.setVisible(true);
+    lapWalls.add(w18);
+
+    // Wall w8 = new Wall();
+    // w8.setX(2440);
+    // w8.setY(675);
+    // w8.setWidth(5);
+    // w8.setHeight(710);
+    // w8.setHorizontal();
+    // w8.setVisible(true);
+    // lapWalls.add(w8);
+
+    // Wall w8 = new Wall();
+    // w8.setX(2440);
+    // w8.setY(675);
+    // w8.setWidth(5);
+    // w8.setHeight(710);
+    // w8.setHorizontal();
+    // w8.setVisible(true);
+    // lapWalls.add(w8);
+
+    // Wall w8 = new Wall();
+    // w8.setX(2440);
+    // w8.setY(675);
+    // w8.setWidth(5);
+    // w8.setHeight(710);
+    // w8.setHorizontal();
+    // w8.setVisible(true);
+    // lapWalls.add(w8);
+
+    // Wall w8 = new Wall();
+    // w8.setX(2440);
+    // w8.setY(675);
+    // w8.setWidth(5);
+    // w8.setHeight(710);
+    // w8.setHorizontal();
+    // w8.setVisible(true);
+    // lapWalls.add(w8);
+
+    // Wall w8 = new Wall();
+    // w8.setX(2440);
+    // w8.setY(675);
+    // w8.setWidth(5);
+    // w8.setHeight(710);
+    // w8.setHorizontal();
+    // w8.setVisible(true);
+    // lapWalls.add(w8);
+
+    // Wall w8 = new Wall();
+    // w8.setX(2440);
+    // w8.setY(675);
+    // w8.setWidth(5);
+    // w8.setHeight(710);
+    // w8.setHorizontal();
+    // w8.setVisible(true);
+    // lapWalls.add(w8);
+
+    // Wall w8 = new Wall();
+    // w8.setX(2440);
+    // w8.setY(675);
+    // w8.setWidth(5);
+    // w8.setHeight(710);
+    // w8.setHorizontal();
+    // w8.setVisible(true);
+    // lapWalls.add(w8);
+
+    // Wall w8 = new Wall();
+    // w8.setX(2440);
+    // w8.setY(675);
+    // w8.setWidth(5);
+    // w8.setHeight(710);
+    // w8.setHorizontal();
+    // w8.setVisible(true);
+    // lapWalls.add(w8);
   }
 
   public void initCheckpoints() {
-    Checkpoint c = new Checkpoint();
-    c.setDelta(0);
-    c.setX(400);
-    c.setY(50);
-    c.setWidth(5);
-    c.setHeight(300);
-    c.setVisible(true);
-    c.setDirection("RIGHT");
-    c.setSpawns();
-    checkpoints.add(c);
+    // Checkpoint c = new Checkpoint();
+    // c.setDelta(0);
+    // c.setX(400);
+    // c.setY(50);
+    // c.setWidth(5);
+    // c.setHeight(300);
+    // c.setVisible(true);
+    // c.setDirection("RIGHT");
+    // c.setSpawns();
+    // checkpoints.add(c);
 
-    c = new Checkpoint();
-    c.setDelta(1);
-    c.setX(50);
-    c.setY(700);
-    c.setWidth(300);
-    c.setHeight(5);
-    c.setVisible(true);
-    c.setDirection("UP");
-    c.setSpawns();
-    checkpoints.add(c);
+    // c = new Checkpoint();
+    // c.setDelta(1);
+    // c.setX(50);
+    // c.setY(700);
+    // c.setWidth(300);
+    // c.setHeight(5);
+    // c.setVisible(true);
+    // c.setDirection("UP");
+    // c.setSpawns();
+    // checkpoints.add(c);
   }
 
   public void initSounds() throws Exception {
@@ -595,21 +763,42 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
       // draw the sprite
       s.paint(g2d);
+
+      System.out.println((int)s.getX() + ", " + (int)s.getY());
     }
   }
 
   public void drawWalls() {
-    for (int i = 0; i < walls.size(); i++) {
-      Wall w1 = walls.get(i);
+    Level l = levels.get(0);
 
-      // always set to the identity
-      try {
-        g2d.setTransform(identity);
+    if (l.isLapRace()) {
+      // draw the walls for the lap race
+      for (int i = 0; i < lapWalls.size(); i++) {
+        Wall w1 = lapWalls.get(i);
+
+        // always set to the identity
+        try {
+          g2d.setTransform(identity);
+        }
+        catch (NullPointerException e) { }
+
+        // draw the walls
+        w1.paint(g2d);
       }
-      catch (NullPointerException e) { }
+    }
+    else {
+      // draw the walls for the demo derby race
+      for (int i = 0; i < demoWalls.size(); i++) {
+        Wall w1 = demoWalls.get(i);
 
-      // draw the walls
-      w1.paint(g2d);
+        // always set to the identity
+        try {
+          g2d.setTransform(identity);
+        }
+        catch (NullPointerException e) { }
+
+        w1.paint(g2d);
+      }
     }
   }
 
@@ -885,70 +1074,121 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       }
 
       // collisions with walls
-      for (int j = 0; j < walls.size(); j++) {
-        Wall w1 = walls.get(j);
+      if (l.isLapRace()) {
+        for (int j = 0; j < lapWalls.size(); j++) {
+          Wall w1 = lapWalls.get(j);
 
-        if (s1.getArea().intersects(w1.getArea().getBounds())) {
+          if (s1.getArea().intersects(w1.getArea().getBounds())) {
 
-          if (w1.isLethal()) {
-            // respawn at last checkpoint
-            respawn(s1);
-          }
-          else {
-            // play sound
-            switch (rand.nextInt(3)) {
-              case 0:              
-                collision1.play();
-                break;
-              case 1:                
-                collision2.play();
-                break;
-              case 2:                
-                collision3.play();
-                break;
-            }
-
-            // reduce health
-            if (l.damageIsOn()) {
-              s1.incHealth(-(int)(s1.getVel() / 2));
-            }
-
-            if (w1.isHorizontal()) {
-              // flip velY (reduce for friction)
-              s1.setVelY(-(s1.getVelY() * 0.9));
+            if (w1.isLethal()) {
+              // respawn at last checkpoint
+              respawn(s1);
             }
             else {
-              // flip velX (reduce for friction)
-              s1.setVelX(-(s1.getVelX() * 0.9));
+              // play sound
+              switch (rand.nextInt(3)) {
+                case 0:              
+                  collision1.play();
+                  break;
+                case 1:                
+                  collision2.play();
+                  break;
+                case 2:                
+                  collision3.play();
+                  break;
+              }
+
+              // reduce health
+              if (l.damageIsOn()) {
+                s1.incHealth(-(int)(s1.getVel() / 2));
+              }
+
+              if (w1.isHorizontal()) {
+                // flip velY (reduce for friction)
+                s1.setVelY(-(s1.getVelY() * 0.9));
+              }
+              else {
+                // flip velX (reduce for friction)
+                s1.setVelX(-(s1.getVelX() * 0.9));
+              }
+
+              // angle of reflection from angle of incidence
+              s1.setFaceAngle(calcReflection(s1.getFaceAngle(), w1.isHorizontal()));
+
+              // move to stop clipping
+              s1.updatePos();
+              s1.updatePos();
+              s1.updatePos();
             }
+          }
+        }
 
-            // angle of reflection from angle of incidence
-            s1.setFaceAngle(calcReflection(s1.getFaceAngle(), w1.isHorizontal()));
+        // collisions with checkpoints
+        for (int j = 0; j < checkpoints.size(); j++) {
+          // increment player's lastestCheck if appropriate (passed in order)
+          Checkpoint c = checkpoints.get(j);
 
-            // move to stop clipping
-            s1.updatePos();
-            s1.updatePos();
-            s1.updatePos();
+          // if they collide
+          if (s1.getArea().intersects(c.getArea().getBounds())) {
+
+            // if it is the next one
+            if ((s1.getLatestCheck() + 1 == (c.getDelta())) || (c.getDelta() == 0 && s1.getLatestCheck() == (checkpoints.size() - 1))) {
+              s1.setLatestCheck(c.getDelta());
+
+              // update player's lapcount
+              if (l.isLapRace() && c.getDelta() == 0) {
+                s1.incCompletedLaps(1);
+                System.out.println("Player " + i + " Completed lap: " + s1.getCompletedLaps());
+              }
+            }
           }
         }
       }
+      else {
+        for (int j = 0; j < demoWalls.size(); j++) {
+          Wall w1 = demoWalls.get(j);
 
-      // collisions with checkpoints
-      for (int j = 0; j < checkpoints.size(); j++) {
-        // increment player's lastestCheck if appropriate (passed in order)
-        Checkpoint c = checkpoints.get(j);
+          if (s1.getArea().intersects(w1.getArea().getBounds())) {
 
-        // if they collide
-        if (s1.getArea().intersects(c.getArea().getBounds())) {
+            if (w1.isLethal()) {
+              // respawn at last checkpoint
+              respawn(s1);
+            }
+            else {
+              // play sound
+              switch (rand.nextInt(3)) {
+                case 0:              
+                  collision1.play();
+                  break;
+                case 1:                
+                  collision2.play();
+                  break;
+                case 2:                
+                  collision3.play();
+                  break;
+              }
 
-          // if it is the next one
-          if ((s1.getLatestCheck() + 1 == (c.getDelta())) || (c.getDelta() == 0 && s1.getLatestCheck() == (checkpoints.size() - 1))) {
-            s1.setLatestCheck(c.getDelta());
+              // reduce health
+              if (l.damageIsOn()) {
+                s1.incHealth(-(int)(s1.getVel() / 2));
+              }
 
-            // update player's lapcount
-            if (l.isLapRace() && c.getDelta() == 0) {
-              s1.incCompletedLaps(1);
-              System.out.println("Player " + i + " Completed lap: " + s1.getCompletedLaps());
+              if (w1.isHorizontal()) {
+                // flip velY (reduce for friction)
+                s1.setVelY(-(s1.getVelY() * 0.9));
+              }
+              else {
+                // flip velX (reduce for friction)
+                s1.setVelX(-(s1.getVelX() * 0.9));
+              }
+
+              // angle of reflection from angle of incidence
+              s1.setFaceAngle(calcReflection(s1.getFaceAngle(), w1.isHorizontal()));
+
+              // move to stop clipping
+              s1.updatePos();
+              s1.updatePos();
+              s1.updatePos();
             }
           }
         }
