@@ -35,6 +35,8 @@ public class PlayerSprite extends BasicSprite {
   int WIDTH = 30;
   int HEIGHT = 45;
 
+  Font smallFont = new Font("Courier", Font.PLAIN, 18);
+
   Random rand = new Random();
 
   //////////////////////
@@ -129,6 +131,10 @@ public class PlayerSprite extends BasicSprite {
   public boolean getLights() {return lights;}
   public void setLights(boolean lights) {this.lights = lights;}
   public void toggleLights() {this.lights = !this.lights;}
+
+  private int number;
+  public int getNumber() {return number;}
+  public void setNumber(int number) {this.number = number;}
 
   ////////////////
   // COLLISIONS //
@@ -232,6 +238,10 @@ public class PlayerSprite extends BasicSprite {
     g2d.setColor(Color.BLACK);
     g2d.drawRect(0, 18, 30, 15);
     g2d.drawRect(0, 0, WIDTH, HEIGHT);
+
+    // draw number on top
+    g2d.setFont(smallFont);
+    g2d.drawString(Integer.toString(getNumber()), 10, 15);
 
     // @TODO draw visible damage
 
@@ -407,6 +417,7 @@ public class PlayerSprite extends BasicSprite {
     setTurn(0);
     setAcc(0);
     setLights(false);
+    setNumber(0);
     setColTime(0);
     setSlide(0);
     setSliding(false);

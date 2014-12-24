@@ -63,7 +63,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 1;
+  int PLAYERS = 4;
 
   // create walls/collision-objects ArrayList
   List<Wall> lapWalls = Collections.synchronizedList(new ArrayList<Wall>());
@@ -85,6 +85,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   // fonts for writing things
   Font font = new Font("Courier", Font.PLAIN, 50);
   Font smallFont = new Font("Courier", Font.PLAIN, 20);
+  Font bigFont = new Font("Courier", Font.PLAIN, 80);
 
   // framerate counters and other iming variables
   int frameRate = 0, frameCount = 0;
@@ -92,6 +93,11 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // boolean toggles
   boolean started = false;
+
+  boolean victory = false;
+
+  // winner id
+  int winId = -1;
 
   // sounds
   Sound menuMusic;
@@ -282,12 +288,15 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
       // set sprite position
       s.setX((490));
-      s.setY((525 + (i * 50)));
+      s.setY((475 + (i * 50)));
       
       // set up controls
       if (i < 4) {
         setStandardControls(s, i);
       }
+
+      // set car number
+      s.setNumber(i + 1);
 
       sprites.add(s);
     }
@@ -364,10 +373,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   public void initLevels() {
 
-    // only init one level, mutate as neccessary
-
-
-    // @TODO temporary grid need multiple levels
     Level l = new Level();
     l.setWidth(w * 2);
     l.setHeight(h * 2);
@@ -384,14 +389,17 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     // add level to ArrayList
     levels.add(l);
 
-    // ceate outside border
+    ////////////////////////////////////
+    // CREATE LAP RACE OUTSIDE BORDER //
+    ////////////////////////////////////
+
     Wall w1 = new Wall();
     w1.setX(345);
     w1.setY(375);
     w1.setWidth(1100);
     w1.setHeight(5);
     w1.setHorizontal();
-    w1.setVisible(true);
+    // w1.setVisible(true);
     lapWalls.add(w1);
 
     Wall w2 = new Wall();
@@ -400,7 +408,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w2.setWidth(5);
     w2.setHeight(95);
     w2.setHorizontal();
-    w2.setVisible(true);
+    // w2.setVisible(true);
     lapWalls.add(w2);
 
     Wall w3 = new Wall();
@@ -409,7 +417,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w3.setWidth(260);
     w3.setHeight(5);
     w3.setHorizontal();
-    w3.setVisible(true);
+    // w3.setVisible(true);
     lapWalls.add(w3);
 
     Wall w4 = new Wall();
@@ -418,7 +426,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w4.setWidth(5);
     w4.setHeight(80);
     w4.setHorizontal();
-    w4.setVisible(true);
+    // w4.setVisible(true);
     lapWalls.add(w4);
 
     Wall w5 = new Wall();
@@ -427,7 +435,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w5.setWidth(605);
     w5.setHeight(5);
     w5.setHorizontal();
-    w5.setVisible(true);
+    // w5.setVisible(true);
     lapWalls.add(w5);
 
     Wall w6 = new Wall();
@@ -436,7 +444,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w6.setWidth(5);
     w6.setHeight(320);
     w6.setHorizontal();
-    w6.setVisible(true);
+    // w6.setVisible(true);
     lapWalls.add(w6);
 
     Wall w7 = new Wall();
@@ -445,7 +453,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w7.setWidth(150);
     w7.setHeight(5);
     w7.setHorizontal();
-    w7.setVisible(true);
+    // w7.setVisible(true);
     lapWalls.add(w7);
 
     Wall w8 = new Wall();
@@ -454,7 +462,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w8.setWidth(5);
     w8.setHeight(710);
     w8.setHorizontal();
-    w8.setVisible(true);
+    // w8.setVisible(true);
     lapWalls.add(w8);
 
     
@@ -464,7 +472,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w9.setWidth(100);
     w9.setHeight(5);
     w9.setHorizontal();
-    w9.setVisible(true);
+    // w9.setVisible(true);
     lapWalls.add(w9);
 
     Wall w10 = new Wall();
@@ -473,7 +481,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w10.setWidth(5);
     w10.setHeight(270);
     w10.setHorizontal();
-    w10.setVisible(true);
+    // w10.setVisible(true);
     lapWalls.add(w10);
 
     Wall w11 = new Wall();
@@ -482,7 +490,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w11.setWidth(1905);
     w11.setHeight(5);
     w11.setHorizontal();
-    w11.setVisible(true);
+    // w11.setVisible(true);
     lapWalls.add(w11);
 
     Wall w12 = new Wall();
@@ -491,7 +499,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w12.setWidth(5);
     w12.setHeight(120);
     w12.setHorizontal();
-    w12.setVisible(true);
+    // w12.setVisible(true);
     lapWalls.add(w12);
 
     Wall w13 = new Wall();
@@ -500,7 +508,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w13.setWidth(210);
     w13.setHeight(5);
     w13.setHorizontal();
-    w13.setVisible(true);
+    // w13.setVisible(true);
     lapWalls.add(w13);
 
     Wall w14 = new Wall();
@@ -509,7 +517,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w14.setWidth(5);
     w14.setHeight(290);
     w14.setHorizontal();
-    w14.setVisible(true);
+    // w14.setVisible(true);
     lapWalls.add(w14);
 
     Wall w15 = new Wall();
@@ -518,7 +526,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w15.setWidth(70);
     w15.setHeight(5);
     w15.setHorizontal();
-    w15.setVisible(true);
+    // w15.setVisible(true);
     lapWalls.add(w15);
 
     Wall w16 = new Wall();
@@ -527,7 +535,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w16.setWidth(5);
     w16.setHeight(545);
     w16.setHorizontal();
-    w16.setVisible(true);
+    // w16.setVisible(true);
     lapWalls.add(w16);
 
     Wall w17 = new Wall();
@@ -536,7 +544,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w17.setWidth(50);
     w17.setHeight(5);
     w17.setHorizontal();
-    w17.setVisible(true);
+    // w17.setVisible(true);
     lapWalls.add(w17);
 
     Wall w18 = new Wall();
@@ -545,104 +553,181 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w18.setWidth(5);
     w18.setHeight(330);
     w18.setHorizontal();
-    w18.setVisible(true);
+    // w18.setVisible(true);
     lapWalls.add(w18);
 
-    // Wall w8 = new Wall();
-    // w8.setX(2440);
-    // w8.setY(675);
-    // w8.setWidth(5);
-    // w8.setHeight(710);
-    // w8.setHorizontal();
-    // w8.setVisible(true);
-    // lapWalls.add(w8);
+    ///////////////////////////////////////
+    // CREATE LAP RACE INSIDE BORDER     //
+    // WILL USE FOR DERBY OUTSIDE BORDER //
+    ///////////////////////////////////////
 
-    // Wall w8 = new Wall();
-    // w8.setX(2440);
-    // w8.setY(675);
-    // w8.setWidth(5);
-    // w8.setHeight(710);
-    // w8.setHorizontal();
-    // w8.setVisible(true);
-    // lapWalls.add(w8);
+    Wall w19 = new Wall();
+    w19.setX(680);
+    w19.setY(730);
+    w19.setWidth(765);
+    w19.setHeight(5);
+    w19.setHorizontal();
+    // w19.setVisible(true);
+    lapWalls.add(w19);
+    demoWalls.add(w19);
 
-    // Wall w8 = new Wall();
-    // w8.setX(2440);
-    // w8.setY(675);
-    // w8.setWidth(5);
-    // w8.setHeight(710);
-    // w8.setHorizontal();
-    // w8.setVisible(true);
-    // lapWalls.add(w8);
+    Wall w20 = new Wall();
+    w20.setX(1440);
+    w20.setY(730);
+    w20.setWidth(5);
+    w20.setHeight(85);
+    w20.setHorizontal();
+    // w20.setVisible(true);
+    lapWalls.add(w20);
+    demoWalls.add(w20);
 
-    // Wall w8 = new Wall();
-    // w8.setX(2440);
-    // w8.setY(675);
-    // w8.setWidth(5);
-    // w8.setHeight(710);
-    // w8.setHorizontal();
-    // w8.setVisible(true);
-    // lapWalls.add(w8);
+    Wall w21 = new Wall();
+    w21.setX(1440);
+    w21.setY(810);
+    w21.setWidth(395);
+    w21.setHeight(5);
+    w21.setHorizontal();
+    // w21.setVisible(true);
+    lapWalls.add(w21);
+    demoWalls.add(w21);
 
-    // Wall w8 = new Wall();
-    // w8.setX(2440);
-    // w8.setY(675);
-    // w8.setWidth(5);
-    // w8.setHeight(710);
-    // w8.setHorizontal();
-    // w8.setVisible(true);
-    // lapWalls.add(w8);
+    Wall w22 = new Wall();
+    w22.setX(1830);
+    w22.setY(810);
+    w22.setWidth(5);
+    w22.setHeight(525);
+    w22.setHorizontal();
+    // w22.setVisible(true);
+    lapWalls.add(w22);
+    demoWalls.add(w22);
 
-    // Wall w8 = new Wall();
-    // w8.setX(2440);
-    // w8.setY(675);
-    // w8.setWidth(5);
-    // w8.setHeight(710);
-    // w8.setHorizontal();
-    // w8.setVisible(true);
-    // lapWalls.add(w8);
+    Wall w23 = new Wall();
+    w23.setX(1745);
+    w23.setY(1330);
+    w23.setWidth(90);
+    w23.setHeight(5);
+    w23.setHorizontal();
+    // w23.setVisible(true);
+    lapWalls.add(w23);
+    demoWalls.add(w23);
 
-    // Wall w8 = new Wall();
-    // w8.setX(2440);
-    // w8.setY(675);
-    // w8.setWidth(5);
-    // w8.setHeight(710);
-    // w8.setHorizontal();
-    // w8.setVisible(true);
-    // lapWalls.add(w8);
+    Wall w24 = new Wall();
+    w24.setX(1745);
+    w24.setY(1330);
+    w24.setWidth(5);
+    w24.setHeight(30);
+    w24.setHorizontal();
+    // w24.setVisible(true);
+    lapWalls.add(w24);
+    demoWalls.add(w24);
 
-    // Wall w8 = new Wall();
-    // w8.setX(2440);
-    // w8.setY(675);
-    // w8.setWidth(5);
-    // w8.setHeight(710);
-    // w8.setHorizontal();
-    // w8.setVisible(true);
-    // lapWalls.add(w8);
+    Wall w25 = new Wall();
+    w25.setX(700);
+    w25.setY(1355);
+    w25.setWidth(1050);
+    w25.setHeight(5);
+    w25.setHorizontal();
+    // w25.setVisible(true);
+    lapWalls.add(w25);
+    demoWalls.add(w25);
+
+    Wall w26 = new Wall();
+    w26.setX(700);
+    w26.setY(1265);
+    w26.setWidth(5);
+    w26.setHeight(95);
+    w26.setHorizontal();
+    // w26.setVisible(true);
+    lapWalls.add(w26);
+    demoWalls.add(w26);
+    
+    Wall w27 = new Wall();
+    w27.setX(680);
+    w27.setY(1265);
+    w27.setWidth(25);
+    w27.setHeight(5);
+    w27.setHorizontal();
+    // w27.setVisible(true);
+    lapWalls.add(w27);
+    demoWalls.add(w27);
+    
+    Wall w28 = new Wall();
+    w28.setX(680);
+    w28.setY(730);
+    w28.setWidth(5);
+    w28.setHeight(540);
+    w28.setHorizontal();
+    // w28.setVisible(true);
+    lapWalls.add(w28);
+    demoWalls.add(w28);
   }
 
   public void initCheckpoints() {
-    // Checkpoint c = new Checkpoint();
-    // c.setDelta(0);
-    // c.setX(400);
-    // c.setY(50);
-    // c.setWidth(5);
-    // c.setHeight(300);
+    Checkpoint c = new Checkpoint();
+    c.setDelta(0);
+    c.setX(750);
+    c.setY(375);
+    c.setWidth(5);
+    c.setHeight(400);
     // c.setVisible(true);
-    // c.setDirection("RIGHT");
-    // c.setSpawns();
-    // checkpoints.add(c);
+    c.setDirection("RIGHT");
+    c.setSpawns();
+    checkpoints.add(c);
 
-    // c = new Checkpoint();
-    // c.setDelta(1);
-    // c.setX(50);
-    // c.setY(700);
-    // c.setWidth(300);
-    // c.setHeight(5);
+    c = new Checkpoint();
+    c.setDelta(1);
+    c.setX(1750);
+    c.setY(300);
+    c.setWidth(5);
+    c.setHeight(530);
     // c.setVisible(true);
-    // c.setDirection("UP");
-    // c.setSpawns();
-    // checkpoints.add(c);
+    c.setDirection("RIGHT");
+    c.setSpawns();
+    checkpoints.add(c);
+
+    c = new Checkpoint();
+    c.setDelta(2);
+    c.setX(1800);
+    c.setY(1120);
+    c.setWidth(700);
+    c.setHeight(5);
+    // c.setVisible(true);
+    c.setDirection("DOWN");
+    c.setSpawns();
+    checkpoints.add(c);
+
+    c = new Checkpoint();
+    c.setDelta(3);
+    c.setX(1610);
+    c.setY(1290);
+    c.setWidth(5);
+    c.setHeight(530);
+    // c.setVisible(true);
+    c.setDirection("LEFT");
+    c.setSpawns();
+    checkpoints.add(c);
+
+    c = new Checkpoint();
+    c.setDelta(4);
+    c.setX(845);
+    c.setY(1290);
+    c.setWidth(5);
+    c.setHeight(530);
+    // c.setVisible(true);
+    c.setDirection("LEFT");
+    c.setSpawns();
+    checkpoints.add(c);
+
+    c = new Checkpoint();
+    c.setDelta(5);
+    c.setX(300);
+    c.setY(975);
+    c.setWidth(530);
+    c.setHeight(5);
+    // c.setVisible(true);
+    c.setDirection("UP");
+    c.setSpawns();
+    checkpoints.add(c);
   }
 
   public void initSounds() throws Exception {
@@ -713,6 +798,11 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
       // draw the scores
       drawScores();
+
+      // draw winner
+      if (victory) {
+        drawWinner();
+      }
     }
     else {
       // draw the backBuffer to the window (no offsets for pages)
@@ -763,8 +853,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
       // draw the sprite
       s.paint(g2d);
-
-      System.out.println((int)s.getX() + ", " + (int)s.getY());
     }
   }
 
@@ -840,8 +928,31 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       // set corresponing color
       g2d.setColor(s.getColor());
       // draw the scores
-      g2d.drawString(Integer.toString(s.getScore()), (i * 50) + 10, 50);
+      g2d.setFont(font);
+      g2d.drawString(Integer.toString(s.getScore()), (i * 100) + 20, 50);
     } 
+  }
+
+  public void drawWinner() {
+    // always set to identity
+    try {
+      g2d.setTransform(identity);
+    }
+    catch (NullPointerException e) { }
+
+    // get winner's color
+    g2d.setColor(sprites.get(winId).getColor());
+
+    g2d.setFont(bigFont);
+
+    Level l = levels.get(0);
+    
+    if (l.isLapRace()) {
+      g2d.drawString("Player " + (winId + 1) + " Wins!!!", 840, 480);
+    }
+    else {
+      g2d.drawString("Player " + (winId + 1) + " Wins!!!", 820, 890);
+    }
   }
 
   public void drawPages() {
@@ -954,13 +1065,22 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       // load the sprite
       PlayerSprite s = sprites.get(i);
 
-      s.setScore(s.getHealth());
+      Level l = levels.get(0);
+
+      if (!l.isLapRace()) {
+        s.setScore(s.getHealth());
+      }
+      else {
+        getRacePositions();
+      }
 
       // destroy if health is too low
       if (s.getHealth() < 1) {
         s.setWreck(true);
         s.setAcc(0);
         s.setTurn(0);
+        s.setLights(false);
+        s.setColor(Color.DARK_GRAY);
       }
 
       // update faceAngle
@@ -982,7 +1102,14 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       if (s.getScreechTime() >= 0) {        
         s.incScreechTime(-1);
       }
+
+      // print out position
+      // System.out.println((int)s.getX() + ", " + (int)(s.getY() - 32));
     }
+  }
+
+  public void getRacePositions() {
+    // @TODO figure out who is winning
   }
 
   public void updateLevel() {
@@ -1038,8 +1165,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
             if (l.damageIsOn()) {
               // reduce health
-              s1.incHealth(-(int)(s2.getVel() / 2));
-              s2.incHealth(-(int)(s1.getVel() / 2));
+              s1.incHealth(-(int)Math.abs((s2.getVel() / 2)));
+              s2.incHealth(-(int)Math.abs((s1.getVel() / 2)));
             }
 
             // temporary values so they can switch velocitities and directions
@@ -1138,7 +1265,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
               // update player's lapcount
               if (l.isLapRace() && c.getDelta() == 0) {
                 s1.incCompletedLaps(1);
-                System.out.println("Player " + i + " Completed lap: " + s1.getCompletedLaps());
+                System.out.println("Player " + (i + 1) + " Completed lap: " + s1.getCompletedLaps());
               }
             }
           }
@@ -1228,7 +1355,11 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
           // PLAYER WINS //
           /////////////////
 
-          System.out.println("Winner: " + i);
+          System.out.println("Winner: " + (i + 1));
+
+          victory = true;
+
+          winId = i;
         }
       }
     }
@@ -1238,7 +1369,6 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
         int survivors = 0;
 
         PlayerSprite winner;
-        int winId = -1;
 
         for (int i = 0; i < sprites.size(); i++) {
           PlayerSprite s = sprites.get(i);
@@ -1256,8 +1386,9 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
           // PLAYER WINS //
           /////////////////
 
+          System.out.println("Winner: " + (winId + 1));
 
-          System.out.println("Winner: " + winId);
+          victory = true;
 
         }
       }
@@ -1391,7 +1522,24 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
     l.setDamage(true);
     l.setLapRace(false);
-    l.setCameraMove(false);
+    l.setCameraMove(true);
+
+    // put players inside the arena
+    for (int i = 0; i < sprites.size(); i++) {
+      PlayerSprite s = sprites.get(i);
+
+      // random coords within range
+      // X => 820 - 1740
+      // Y => 890 - 1265
+      s.setX(rand.nextInt(920) + 820);
+      s.setY(rand.nextInt(375) + 890);
+
+      // randomise direction
+      s.setFaceAngle(90 * rand.nextInt(4));
+
+      // turn on lights to show direction
+      s.setLights(true);
+    }
   }
 
   public void makeLapRace() {
@@ -1400,6 +1548,20 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     l.setDamage(false);
     l.setLapRace(true);
     l.setCameraMove(true);
+
+    // set sprite positions to lap race
+    for (int i = 0; i < sprites.size(); i++) {
+      PlayerSprite s = sprites.get(i);
+
+      s.setX((490));
+      s.setY((475 + (i * 50)));
+
+      // make them face right
+      s.setFaceAngle(0);
+
+      // turn off the lights
+      s.setLights(false);
+    }
   }
 
   /////////////////////////
