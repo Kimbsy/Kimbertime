@@ -164,10 +164,23 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     play_button.setAction("play");
 
     Button settings_button = new Button();
+    settings_button.setWidth(275);
     settings_button.setDescription("Settings");
     settings_button.setAction("settings");
 
+    // game mode buttons on settings page
+    Button derby_button = new Button();
+    derby_button.setWidth(350);
+    derby_button.setDescription("Demo Derby");
+    derby_button.setAction("makedemoderby");
+
+    Button lapRace_button = new Button();
+    lapRace_button.setWidth(275);
+    lapRace_button.setDescription("Lap Race");
+    lapRace_button.setAction("makelaprace");
+
     Button credits_button = new Button();
+    credits_button.setWidth(250);
     credits_button.setDescription("Credits");
     credits_button.setAction("credits");
 
@@ -207,6 +220,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     settings.setHeight(h);
     settings.setFont(font);
 
+    settings.addButton(derby_button);
+    settings.addButton(lapRace_button);
     settings.addButton(back_button);
 
     pages.add(settings);
@@ -261,12 +276,10 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     for (int i = 0; i < PLAYERS; i++) {
       PlayerSprite s = new PlayerSprite();
 
-      s.setX(/*(w / 2) + */(200));
-      s.setY(/*(h / 2) + */(175 + (i * 50)));
-      
       // set sprite position
-      // respawn(s);
-
+      s.setX((200));
+      s.setY((175 + (i * 50)));
+      
       // set up controls
       if (i < 4) {
         setStandardControls(s, i);
@@ -354,13 +367,17 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     Level l = new Level();
     l.setWidth(w * 2);
     l.setHeight(h * 2);
+
+    // background image
     try {
       l.setImage(ImageIO.read(new File("img/Wooden_floor.jpg")));
     }
     catch (IOException e) {
-      System.out.println("shit");
+      System.out.println("shit image");
       e.printStackTrace();
     }
+
+    // add level to ArrayList
     levels.add(l);
 
     // ceate outside border
@@ -370,8 +387,8 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     w1.setHeight(5);
     w1.setHorizontal();
     w1.setVisible(true);
-    w1.setColor(Color.GREEN);
-    w1.setLethal(true);
+    // w1.setColor(Color.GREEN);
+    // w1.setLethal(true);
     walls.add(w1);
 
     Wall w2 = new Wall();
@@ -810,6 +827,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
                 break;
             }
 
+            // move to stop clipping
             while (s1.getArea().intersects(s2.getArea().getBounds())) {
               if (s1.getX() > s2.getX()) {
                 s1.incX(1);
@@ -926,6 +944,12 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
           // if it is the next one
           if ((s1.getLatestCheck() + 1 == (c.getDelta())) || (c.getDelta() == 0 && s1.getLatestCheck() == (checkpoints.size() - 1))) {
             s1.setLatestCheck(c.getDelta());
+
+            // update player's lapcount
+            if (l.isLapRace() && c.getDelta() == 0) {
+              s1.incCompletedLaps(1);
+              System.out.println("Player " + i + " Completed lap: " + s1.getCompletedLaps());
+            }
           }
         }
       }
@@ -950,7 +974,54 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
   }
 
   public void checkVictoryConditions() {
-    // @TODO check if a player has won (too far ahead, crossed finish line)
+    // get info on level
+    Level l = levels.get(0);
+
+    // if lap race
+    if (l.isLapRace()) {
+      for (int i = 0; i < sprites.size(); i++) {
+        PlayerSprite s = sprites.get(i);
+
+        if (s.getCompletedLaps() >= l.getNumLaps()) {
+
+          /////////////////
+          // PLAYER WINS //
+          /////////////////
+
+          System.out.println("Winner: " + i);
+        }
+      }
+    }
+    else {
+      if (l.damageIsOn()) {
+
+        int survivors = 0;
+
+        PlayerSprite winner;
+        int winId = -1;
+
+        for (int i = 0; i < sprites.size(); i++) {
+          PlayerSprite s = sprites.get(i);
+
+          if (!s.isWreck()) {
+            winner = s;
+            winId = i;
+            survivors++;
+          }
+        }
+
+        if (survivors == 1) {
+
+          /////////////////
+          // PLAYER WINS //
+          /////////////////
+
+
+          System.out.println("Winner: " + winId);
+
+        }
+      }
+    }
   }
 
   ////////////
@@ -1020,6 +1091,14 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
       case "NO":
         // do nothing
         break;
+      case "makedemoderby":
+        makeDemoDerby();
+        openPage("main");
+        break;
+      case "makelaprace":
+        makeLapRace();
+        openPage("main");
+        break;
       case "play":
         // get rid of menu
         setAllNotVisible();
@@ -1067,6 +1146,22 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
     }
   }
 
+  public void makeDemoDerby() {
+    Level l = levels.get(0);
+
+    l.setDamage(true);
+    l.setLapRace(false);
+    l.setCameraMove(false);
+  }
+
+  public void makeLapRace() {
+    Level l = levels.get(0);
+
+    l.setDamage(false);
+    l.setLapRace(true);
+    l.setCameraMove(true);
+  }
+
   /////////////////////////
   // KEYLISTENER METHODS //
   /////////////////////////
@@ -1099,7 +1194,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
           PlayerSprite s = sprites.get(i);
 
-          if (!s.isWreck()) {
+          if (!s.isWreck() && !s.isSliding()) {
             if (key == s.getUpKey()) {
               s.setAcc(1);
             }

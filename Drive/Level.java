@@ -27,9 +27,10 @@ public class Level extends BasicSprite {
   // BASIC PROPERTIES //
   //////////////////////
   
-  int width;
-  int height;
-  BufferedImage image;
+  private int width;
+  private int height;
+  private BufferedImage image;
+  private int numLaps;
 
   ////////////////////////////
   // BASIC ACCESSOR METHODS //
@@ -38,6 +39,7 @@ public class Level extends BasicSprite {
   public int getWidth() {return width;}
   public int getHeight() {return height;}
   public BufferedImage getImage() {return image;}
+  public int getNumLaps() {return numLaps;}
 
   ///////////////////////////
   // BASIC MUTATOR METHODS //
@@ -46,6 +48,7 @@ public class Level extends BasicSprite {
   public void setWidth(int width) {this.width = width;}
   public void setHeight(int height) {this.height = height;}
   public void setImage(BufferedImage image) {this.image = image;}
+  public void setNumLaps(int numLaps) {this.numLaps = numLaps;}
 
   ///////////////////////
   // GAMEPLAY BOOLEANS //
@@ -58,6 +61,10 @@ public class Level extends BasicSprite {
   public boolean cameraMove;
   public boolean cameraShouldMove() {return cameraMove;}
   public void setCameraMove(boolean cameraMove) {this.cameraMove = cameraMove;}
+
+  public boolean lapRace;
+  public boolean isLapRace() {return lapRace;}
+  public void setLapRace(boolean lapRace) {this.lapRace = lapRace;}
 
   ///////////////////
   // LEVEL METHODS //
@@ -75,7 +82,9 @@ public class Level extends BasicSprite {
   Level() {
     setWidth(0);
     setHeight(0);
+    setNumLaps(3);
     setDamage(false);
     setCameraMove(true);
+    setLapRace(true);
   }
 }

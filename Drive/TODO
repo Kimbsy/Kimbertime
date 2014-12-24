@@ -1,13 +1,22 @@
 TODO
 
-Levels (init one level, then mutate to fit:
+Levels (init one level, then mutate to fit):
   drag race
   circuit race
   sumo
   sweepers
   demolition derby
 
-Need to slow down bounces from collisions
+Need to make level (buffered image) much bigger than playable area
+
+// Need to pretty up menu a bit
+//   buttons the width of text
+
+Need to have settings change game mode
+
+Need to stop cars clipping into walls
+
+// Need to slow down bounces from collisions
 
 // Need to make stuff dependant on levels, damage, camera move etc
 
@@ -15,8 +24,8 @@ Need to slow down bounces from collisions
 
 // Need to make borders
 
-Need to figure out how to do circuit
-  multiple checkpoint lines that need to be crossed in order X times?
+// Need to figure out how to do circuit
+//   multiple checkpoint lines that need to be crossed in order X times?
 
 Need to make damage visible
 

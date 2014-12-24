@@ -192,6 +192,11 @@ public class PlayerSprite extends BasicSprite {
   public void setScore(int score) {this.score = score;}
   public void incScore(int i) {this.score += i;}
 
+  private int completedLaps;
+  public int getCompletedLaps() {return completedLaps;}
+  public void setCompletedLaps(int completedLaps) {this.completedLaps = completedLaps;}
+  public void incCompletedLaps(int i) {this.completedLaps += i;}
+
   /////////////////
   // CHECKPOINTS //
   /////////////////
@@ -408,6 +413,7 @@ public class PlayerSprite extends BasicSprite {
     setHealth(100);
     setWreck(false);
     setScore(0);
+    setCompletedLaps(0);
     setLatestCheck(0);
   }
 }
