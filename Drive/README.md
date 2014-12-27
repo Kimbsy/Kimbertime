@@ -6,4 +6,4 @@ Written in Java, it is an n-player top-down driving game inspired by the SEGA Me
 
 
 To create executable .jar file :
-  jar cfe Drive.jar Drive *.class sound
+  jar cfe Drive.jar Drive *.class sound img
