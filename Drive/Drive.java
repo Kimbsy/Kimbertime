@@ -63,7 +63,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
   // create sprite ArrayList
   List<PlayerSprite> sprites = Collections.synchronizedList(new ArrayList<PlayerSprite>());
-  int PLAYERS = 4;
+  int PLAYERS = 2;
 
   // create walls/collision-objects ArrayList
   List<Wall> lapWalls = Collections.synchronizedList(new ArrayList<Wall>());
@@ -1297,7 +1297,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
 
               // reduce health
               if (l.damageIsOn()) {
-                s1.incHealth(-(int)(s1.getVel() / 2));
+                s1.incHealth(-(int)Math.abs(s1.getVel() / 2));
               }
 
               if (w1.isHorizontal()) {
@@ -1355,7 +1355,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
           // PLAYER WINS //
           /////////////////
 
-          System.out.println("Winner: " + (i + 1));
+          // System.out.println("Winner: " + (i + 1));
 
           victory = true;
 
@@ -1386,7 +1386,7 @@ public class Drive extends JFrame implements Runnable, MouseListener, KeyListene
           // PLAYER WINS //
           /////////////////
 
-          System.out.println("Winner: " + (winId + 1));
+          // System.out.println("Winner: " + (winId + 1));
 
           victory = true;
 
